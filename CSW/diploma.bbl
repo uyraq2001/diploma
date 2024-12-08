@@ -1,0 +1,173 @@
+\begin{thebibliography}{10}
+\def\selectlanguageifdefined#1{
+\expandafter\ifx\csname date#1\endcsname\relax
+\else\language\csname l@#1\endcsname\fi}
+\ifx\undefined\url\def\url#1{{\small #1}}\else\fi
+\ifx\undefined\BibAuthor\def\BibAuthor#1{\emph{#1}}\else\fi
+\ifx\undefined\BibTitle\def\BibTitle#1{#1}\else\fi
+\ifx\undefined\BibUrl\def\BibUrl#1{\url{#1}}\else\fi
+\ifx\undefined\BibAnnote\def\BibAnnote#1{}\else\fi
+\ifx\undefined\BibSection\def\BibSection#1#2#3{}\else\fi
+
+\bibitem{RG}
+\selectlanguageifdefined{english}
+\BibAuthor{Erd\"os,~P.} \BibTitle{On random graphs i}~/ P.~Erd\"os,
+  A.~R\'enyi~// \emph{Publicationes Mathematicae Debrecen}. "---
+\newblock 1959. "---
+\newblock Vol.~6. "---
+\newblock Pp.~290--297.
+
+\bibitem{RG1}
+\selectlanguageifdefined{english}
+\BibAuthor{Gilbert,~E.~N.} \BibTitle{Random graphs}~/ E.~N. Gilbert~//
+  \emph{Annals of Mathematical Statistics}. "---
+\newblock 1959. "---
+\newblock Vol.~30, no.~4. "---
+\newblock Pp.~1141--1144.
+
+\bibitem{wico}
+\selectlanguageifdefined{english}
+\BibAuthor{Blum,~A.} \BibTitle{Foundations of data science}~/ A.~Blum, J.~E.
+  Hopcroft, R.~Kannan. "---
+\newblock 2020.
+
+\bibitem{habr}
+\selectlanguageifdefined{english}
+\BibAuthor{Bollobas,~B.} \BibTitle{Random Graphs}~/ B.~Bollobas. Cambridge
+  Studies in Advanced Mathematics. "---
+\newblock 2 edition. "---
+\newblock Cambridge University Press, 2001.
+
+\bibitem{rey2}
+\selectlanguageifdefined{russian}
+\BibAuthor{Райгородский,~А.~М.} \BibTitle{Модели случайных графов}~/ А.~М.
+  Райгородский~// \emph{Труды МФТИ}. "---
+\newblock 2010. "---
+\newblock \CYRT.~2, {\cyr\textnumero}~4. "---
+\newblock {\cyr\CYRS.}~130 -- 140.
+
+\bibitem{BA}
+\selectlanguageifdefined{english}
+\BibAuthor{Albert,~R.} \BibTitle{Statistical mechanics of complex networks}~/
+  R.~Albert, A.-L. Barabasi~// \emph{Reviews of Modern Physics}. "---
+\newblock 2002. "---
+\newblock Vol.~74, no.~1. "---
+\newblock Pp.~47 -- 98.
+
+\bibitem{rey1}
+\selectlanguageifdefined{english}
+\BibAuthor{Райгородский,~А.~М.} \BibTitle{Модели случайных графов и их
+  применени}~/ А.~М. Райгородский. "---
+\newblock Москва, М.: Издательство МЦНМО, 2011.
+
+\bibitem{article}
+\selectlanguageifdefined{russian}
+\BibAuthor{Берновски,~М.} \BibTitle{Случайные графы, модели и генераторы
+  безмасштабных графов.}~/ М.~Берновски, Н.~Кузюрин~// \emph{Труды Института
+  системного программирования РАН.} "---
+\newblock 2012. "---
+\newblock \CYRT.~22, {\cyr\textnumero}~4. "---
+\newblock {\cyr\CYRS.}~419 -- 432.
+
+\bibitem{ts}
+\selectlanguageifdefined{english}
+\BibAuthor{David,~E.} \BibTitle{Networks, Crowds, and Markets: Reasoning About
+  a Highly Connected World}~/ E.~David, K.~Jon. "---
+\newblock USA: Cambridge University Press, 2010.
+
+\bibitem{psych}
+\selectlanguageifdefined{english}
+\BibTitle{Пользователи социальных сетей: современные исследования
+  [{Э}лектронный ресурс]}. "---
+\newblock
+  URL:~\url{https://psychojournal.ru/article/887-polzovateli-socialnyh-setey-sovremennye-issledovaniya.html}
+  (Дата обращения 10.03.2023). Загл. с экр. Яз. рус.
+
+\bibitem{aw}
+\selectlanguageifdefined{english}
+\BibAuthor{Feld,~S.~L.} \BibTitle{Why your friends have more friends than you
+  do}~/ S.~L. Feld~// \emph{American Journal of Sociology}. "---
+\newblock 1991. "---
+\newblock Vol.~96. "---
+\newblock Pp.~1464 -- 1477.
+
+\bibitem{fi}
+\selectlanguageifdefined{english}
+\BibAuthor{Pal,~S.} \BibTitle{A study on the friendship paradox quantitative
+  analysis and relationship with assortative mixing}~/ S.~Pal, F.~Yu,
+  Y.~Novick, A.~Swami, A.~Bar-Noy~// \emph{Applied Network Science}. "---
+\newblock 09 2019. "---
+\newblock Vol.~4. "---
+\newblock Pp.~71 -- 118.
+
+\bibitem{mir}
+\selectlanguageifdefined{english}
+\BibAuthor{Sidorov,~S.} \BibTitle{Friendship paradox in growth networks:
+  analytical and empirical analysis}~/ S.~Sidorov, S.~Mironov, A.~Grigoriev~//
+  \emph{Appl Netw Sci}. "---
+\newblock 2023. "---
+\newblock Vol.~74, no.~6. "---
+\newblock Pp.~47 -- 51.
+
+\bibitem{ptl}
+\selectlanguageifdefined{english}
+\BibTitle{matplotlib.pyplot [{Э}лектронный ресурс]}. "---
+\newblock
+  URL:~\url{https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.html}
+  (Дата обращения 20.05.2023). Загл. с экр. Яз. англ.
+
+\bibitem{lj}
+\selectlanguageifdefined{english}
+\BibAuthor{Leskovec,~J.} \BibTitle{Community structure in large networks:
+  Natural cluster sizes and the absence of large well-defined clusters}~/
+  J.~Leskovec, K.~J. Lang, A.~Dasgupta, M.~W. Mahoney~// \emph{Internet
+  Mathematics}. "---
+\newblock 2009. "---
+\newblock Vol.~6, no.~1. "---
+\newblock Pp.~29--123. \BibUrl{https://doi.org/10.1080/15427951.2009.10129177}.
+
+\bibitem{twit}
+\selectlanguageifdefined{english}
+\BibAuthor{Mcauley,~J.} \BibTitle{Learning to discover social circles in ego
+  networks}~/ J.~Mcauley, J.~Leskovec~// \emph{NIPS}. "---
+\newblock 01 2012. "---
+\newblock Vol.~1. "---
+\newblock Pp.~539--547.
+
+\bibitem{cit}
+\selectlanguageifdefined{english}
+\BibAuthor{Leskovec,~J.} \BibTitle{Graphs over time: Densification laws,
+  shrinking diameters and possible explanations}~/ J.~Leskovec, J.~Kleinberg,
+  C.~Faloutsos~// Proceedings of the Eleventh ACM SIGKDD International
+  Conference on Knowledge Discovery in Data Mining. "---
+\newblock New York, NY, USA: Association for Computing Machinery, 2005. "---
+\newblock KDD '05. "---
+\newblock Pp.~177 -- 187. \BibUrl{https://doi.org/10.1145/1081870.1081893}.
+
+\bibitem{reddit}
+\selectlanguageifdefined{english}
+\BibAuthor{Kumar,~S.} \BibTitle{Community interaction and conflict on the
+  web}~/ S.~Kumar, W.~L. Hamilton, J.~Leskovec, D.~Jurafsky~// Proceedings of
+  the 2018 World Wide Web Conference. "---
+\newblock Republic and Canton of Geneva, CHE: International World Wide Web
+  Conferences Steering Committee, 2018. "---
+\newblock WWW '18. "---
+\newblock Pp.~933 -- 943. \BibUrl{https://doi.org/10.1145/3178876.3186141}.
+
+\bibitem{au}
+\selectlanguageifdefined{english}
+\BibAuthor{Paranjape,~A.} \BibTitle{Motifs in temporal networks}~/
+  A.~Paranjape, A.~R. Benson, J.~Leskovec~// \emph{CoRR}. "---
+\newblock 2016. "---
+\newblock Vol.~abs/1612.09259. \BibUrl{http://arxiv.org/abs/1612.09259}.
+
+\bibitem{stdmsg}
+\selectlanguageifdefined{english}
+\BibAuthor{Panzarasa,~P.} \BibTitle{Patterns and dynamics of users' behavior
+  and interaction: Network analysis of an online community}~/ P.~Panzarasa,
+  T.~Opsahl, K.~Carley~// \emph{JASIST}. "---
+\newblock 05 2009. "---
+\newblock Vol.~60. "---
+\newblock Pp.~911--932.
+
+\end{thebibliography}

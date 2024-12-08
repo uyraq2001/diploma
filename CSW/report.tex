@@ -1,0 +1,1539 @@
+\documentclass[bachelor, och, pract, times]{SCWorks}
+% параметр - тип обучения - одно из значений:
+%    spec     - специальность
+%    bachelor - бакалавриат (по умолчанию)
+%    master   - магистратура
+% параметр - форма обучения - одно из значений:
+%    och   - очное (по умолчанию)
+%    zaoch - заочное
+% параметр - тип работы - одно из значений:
+%    referat    - реферат
+%    coursework - курсовая работа (по умолчанию)
+%    diploma    - дипломная работа
+%    pract      - отчет по практике
+%    nir      - отчет о научно-исследовательской работе
+%    autoref    - автореферат выпускной работы
+%    assignment - задание на выпускную квалификационную работу
+%    review     - отзыв руководителя
+%    critique   - рецензия на выпускную работу
+% параметр - включение шрифта
+%    times    - включение шрифта Times New Roman (если установлен)
+%               по умолчанию выключен
+\usepackage[T2A]{fontenc}
+\usepackage[cp1251]{inputenc}
+\usepackage{graphicx}
+\usepackage{tempora}
+
+\usepackage[sort,compress]{cite}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{fancyvrb}
+\usepackage{longtable}
+\usepackage{minted}
+\usepackage{array}
+\usepackage[english,russian]{babel}
+
+
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}% <-- moves axis labels near ticklabels (respects tick label widths)
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+
+\newcommand{\eqdef}{\stackrel {\rm def}{=}}
+\newcommand{\No}{\textnumero}
+\newtheorem{lem}{Лемма}
+\setminted{style=bw,
+	linenos=true,
+	breaklines=true,
+	numbersep=5pt,
+	tabsize=2,
+	fontsize=\small,
+	bgcolor=white}
+\setmintedinline{style=bw,
+	bgcolor=white,
+	fontsize=\normalsize
+	}	
+\pgfplotsset{every axis legend/.append style={at={(0.6,1)},anchor=south west}}
+%\pgfplotsset{every axis title/.style={at={(0.5,1)},above,yshift=6pt}}
+\begin{document}
+
+% Кафедра (в родительном падеже)
+\chair{математической кибернетики и компьютерных наук}
+
+% Тема работы
+\title{Теория графов}
+
+% Курс
+\course{3}
+
+% Группа
+\group{311}
+
+% Факультет (в родительном падеже) (по умолчанию "факультета КНиИТ")
+%\department{факультета КНиИТ}
+
+% Специальность/направление код - наименование
+\napravlenie{02.03.02 "--- Фундаментальная информатика и информационные технологии}
+%\napravlenie{02.03.01 "--- Математическое обеспечение и администрирование информационных систем}
+%\napravlenie{09.03.01 "--- Информатика и вычислительная техника}
+%\napravlenie{09.03.04 "--- Программная инженерия}
+%\napravlenie{10.05.01 "--- Компьютерная безопасность}
+
+% Для студентки. Для работы студента следующая команда не нужна.
+%\studenttitle{Студентки}
+
+% Фамилия, имя, отчество в родительном падеже
+\author{Козырева Юрия Дмитриевича}
+
+% Заведующий кафедрой
+\chtitle{к.\,ф.-м.\,н., доцент} % степень, звание
+\chname{С.\,В.\,Миронов}
+
+%Научный руководитель (для реферата преподаватель проверяющий работу)
+\satitle{старший преподаватель} %должность, степень, звание
+\saname{М.\,С.\,Портенко}
+
+% Руководитель практики от организации (только для практики,
+% для остальных типов работ не используется)
+%\patitle{доцент, к.\,ф.-м.\,н.} 
+%\paname{С.\,В.\,Миронов}
+
+% Семестр (только для практики, для остальных
+% типов работ не используется)
+%\term{1}
+
+% Наименование практики (только для практики, для остальных
+% типов работ не используется)
+%\practtype{учебная}
+
+% Продолжительность практики (количество недель) (только для практики,
+% для остальных типов работ не используется)
+%\duration{16}
+
+% Даты начала и окончания практики (только для практики, для остальных
+% типов работ не используется)
+%\practStart{01.09.2019}
+%\practFinish{31.12.2019}
+
+% Год выполнения отчета
+\date{2021}
+
+\maketitle
+
+% Включение нумерации рисунков, формул и таблиц по разделам
+% (по умолчанию - нумерация сквозная)
+% (допускается оба вида нумерации)
+%\secNumbering
+
+
+\tableofcontents
+
+% Раздел "Обозначения и сокращения". Может отсутствовать в работе
+%\abbreviations
+
+% Раздел "Определения". Может отсутствовать в работе
+%\definitions
+
+% Раздел "Определения, обозначения и сокращения". Может отсутствовать в работе.
+% Если присутствует, то заменяет собой разделы "Обозначения и сокращения" и "Определения"
+%\defabbr
+
+% Раздел "Введение"
+
+
+
+
+
+
+\section{Создание класса Граф}
+\subsection{Задание}
+Необходимо создать класс (или иерархию классов - на усмотрение разработчика), содержащий:
+\begin{itemize}
+\item Структуру для хранения списка смежности графа (не работать с графом через матрицы смежности, если в некоторых алгоритмах удобнее использовать список ребер - реализовать метод, преобразующий список смежности в список ребер);
+\item Конструкторы (не менее 3-х):
+	\begin{itemize}
+		\item конструктор по умолчанию, создающий пустой граф;
+	    \item конструктор, заполняющий данные графа из файла;
+	    \item конструктор-копию (аккуратно, не все сразу делают именно копию);
+	    \item специфические конструкторы для удобства тестирования.
+	\end{itemize};
+\item Методы:
+	\begin{itemize}
+		\item добавляющие вершину;
+		\item добавляющие ребро (дугу);
+		\item удаляющие вершину;
+		\item удаляющие ребро (дугу);
+		\item выводящие список смежности в файл (в том числе в пригодном для чтения конструктором формате).
+	\end{itemize}
+	Не выполняйте некорректные операции, сообщайте об ошибках;
+\item Должны поддерживаться как ориентированные, так и неориентированные графы. Заранее предусмотрите возможность добавления меток и\\или весов для дуг. Поддержка мультиграфа не требуется;
+\item Добавьте минималистичный консольный интерфейс пользователя (не смешивая его с реализацией!), позволяющий добавлять и удалять вершины и рёбра (дуги) и просматривать текущий список смежности графа;
+\item Сгенерируйте не менее 4 входных файлов с разными типами графов (балансируйте на комбинации ориентированность-взвешенность) для тестирования класса в этом и последующих заданиях. Графы должны содержать не менее 7-10 вершин, в том числе, петли и изолированные вершины.
+\end{itemize}
+\subsection{Решение}
+\begin{minted}{cpp}
+	    #pragma once
+	    #include <iostream>
+	    #include <vector>
+	    #include <map>
+	    #include <string>
+	    #include <sstream>
+	    #include <set>
+	    #include <utility>
+	    #include <algorithm>
+	    using namespace std;
+	class edge;
+	class vertex {
+	private:
+	    long long id;
+	    map<long long, edge*> outEdges;
+	    map<long long, edge*> inEdges;
+	    static long long lastId;
+	public:
+	    long long getId() {
+	        return id;
+	    }
+	
+	    void setid(long long id) {
+	        this->id = id;
+	    }
+	
+	    map<long long, edge*> getInEdges() {
+	        return inEdges;
+	    }
+	
+	    void setInEdges(map<long long, edge*> inEdges) {
+	        this->inEdges = inEdges;
+	    }
+	
+	    map<long long, edge*> getOutEdges() {
+	        return outEdges;
+	    }
+	
+	    void setOutEdges(map<long long, edge*> outEdges) {
+	        this->outEdges = outEdges;
+	    }
+	
+	    vertex() {
+	        inEdges = map<long long, edge*>();
+	        outEdges = map<long long, edge*>();
+	        id = 0;
+	    }
+	
+	    vertex(long long n) {
+	        inEdges = map<long long, edge*>();
+	        outEdges = map<long long, edge*>();
+	        id = n;
+	    }
+	
+	    vertex(const vertex &v) {
+	        id = v.id;
+	        inEdges = v.inEdges;
+	        outEdges = v.outEdges;
+	    }
+	
+	    bool operator==(const vertex& v) {
+	        return this->getId() == v.id;
+	    }
+	};
+	bool operator==(const pair<const long long, vertex*>& v1, const pair<const long long, vertex*>& v2) {
+	    return v1.second == v2.second;
+	}
+	
+	class edge {
+	private:
+	    vertex* start;
+	    vertex* end;
+	    long long id;
+	    double weight;
+	    bool weighted;
+	public:
+	    static long long lastId;
+	    vertex* getStart() {
+	        return start;
+	    }
+	
+	    void setStart(vertex* start) {
+	        this->start = start;
+	    }
+	
+	    vertex* getEnd() {
+	        return end;
+	    }
+	
+	    void setEnd(vertex* end) {
+	        this->end = end;
+	    }
+	
+	    long long getId() {
+	        return id;
+	    }
+	
+	    double getWeight() {
+	        if (weighted) {
+	            return weight;
+	        }
+	        else {
+	            throw "Error: graph is not weighted";
+	            return 0;
+	        }
+	    }
+	
+	    void setWeight(double weight) {
+	        if (weighted) {
+	            this->weight = weight;
+	        }
+	        else {
+	            throw "Error: graph is not weighted\n";
+	            return;
+	        }
+	    }
+	
+	    bool isWeighted() {
+	        return weighted;
+	    }
+	
+	    edge() {
+	        start = new vertex();
+	        end = new vertex();
+	        weighted = 0;
+	        weight = 0;
+	        lastId++;
+	        id = lastId;
+	    }
+	
+	    edge(vertex* start, vertex* end, bool weighted, double weight = 0) {
+	        this->start = start;
+	        this->end = end;
+	        this->weighted = weighted;
+	        this->weight = weight;
+	        lastId++;
+	        id = lastId;
+	    }
+	
+	    edge(const edge &e) {
+	        start = e.start;
+	        end = e.end;
+	        weighted = e.weighted;
+	        weight = e.weight;
+	        id = e.id;
+	    }
+	
+	    bool operator ==(edge e) {
+	        return this->id == e.id;
+	    }
+	};
+	long long edge::lastId = -1;
+	
+	class graph {
+	    map<long long, vertex*> V;
+	    map<long long, edge*> E;
+	    bool weighted;
+	    bool oriented;
+	    bool multy;
+	public:
+	    graph() {
+	        V = map<long long, vertex*>();
+	        E = map<long long, edge*>();
+	        weighted = 0;
+	        oriented = 0;
+	        multy = 0;
+	    }
+	
+	    graph(const graph &g) {
+	        V = g.V;
+	        E = g.E;
+	        weighted = g.weighted;
+	        oriented = g.oriented;
+	        multy = g.multy;
+	    }
+	
+	    void setType(bool w, bool o, bool m) {
+	        weighted = w;
+	        oriented = o;
+	        multy = m;
+	    }
+	
+	    bool isWeighted() {
+	        return weighted;
+	    }
+	
+	    bool isOriented() {
+	        return oriented;
+	    }
+	
+	    bool isMulty() {
+	        return multy;
+	    }
+	
+	    void add(long long p1) {
+	        if (find_if(V.begin(), V.end(),
+	            [p1](pair <long long, vertex*> v) {return v.second->getId() == p1; }) == V.end()) {
+	            V.insert(pair<long long, vertex*>(p1, new vertex(p1)));
+	        }
+	        else {
+	            throw "Error: repeating vertex:" + to_string(p1) + "\n";
+	            return;
+	        }
+	    }
+	
+	    void add(long long p1, long long p2, double w = 0) {
+	        map<long long, vertex*>::iterator startI =
+	            find_if(V.begin(), V.end(),
+	                [p1](pair <long long, vertex*> v) {return v.second->getId() == p1; });
+	        if (startI == V.end()) {
+	            throw "Error: the graph doesn't contain starting vertex of this edge\n";
+	            return;
+	        }
+	        map<long long, vertex*>::iterator endI =
+	            find_if(V.begin(), V.end(),
+	                [p2](pair <long long, vertex*> v) {return v.second->getId() == p2; });
+	        if (endI == V.end()) {
+	            throw "Error: the graph doesn't contain ending vertex of this edge\n";
+	            return;
+	        }
+	        vertex* newStart = (*startI).second;
+	        vertex* newEnd = (*endI).second;
+	        edge* newEdge = new edge(newStart, newEnd, weighted, w);
+	        E.insert(pair<long long, edge*>(newEdge->getId(), newEdge));
+	        map<long long, edge*> newOutEdges = newStart->getOutEdges();
+	        newOutEdges.insert(pair<long long, edge*>(newEdge->getId(), newEdge));
+	        newStart->setOutEdges(newOutEdges);
+	        map<long long, edge*> newInEdges = newEnd->getInEdges();
+	        newInEdges.insert(pair<long long, edge*>(newEdge->getId(), newEdge));
+	        newEnd->setInEdges(newInEdges);
+	        if (!oriented) {
+	            edge* newREdge = new edge(newEnd, newStart, weighted, w);
+	            E.insert(pair<long long, edge*>(newREdge->getId(), newREdge));
+	            map<long long, edge*> newROutEdges = newEnd->getOutEdges();
+	            newOutEdges.insert(pair<long long, edge*>(newREdge->getId(), newREdge));
+	            newEnd->setOutEdges(newROutEdges);
+	            map<long long, edge*> newRInEdges = newStart->getInEdges();
+	            newRInEdges.insert(pair<long long, edge*>(newREdge->getId(), newREdge));
+	            newEnd->setInEdges(newRInEdges);
+	        }
+	    }
+	
+	    void addVertex(vertex* v) {
+	        V.insert(pair<long long, vertex*>(V.size(), v));
+	    }
+	
+	    void addEdge(edge* e) {
+	        map<long long, vertex*>::iterator startI = 
+	            find_if(V.begin(), V.end(), [e](pair <long long, vertex*> v) 
+	                {return v.second->getId() == e->getStart()->getId(); });
+	        if (startI == V.end()) {
+	            throw "Error: the graph doesn't contain starting vertex of this edge\n";
+	            return;
+	        }
+	        map<long long, vertex*>::iterator endI =
+	            find_if(V.begin(), V.end(), [e](pair <long long, vertex*> v) 
+	                {return v.second->getId() == e->getEnd()->getId(); });
+	        if (endI == V.end()) {
+	            throw "Error: the graph doesn't contain ending vertex of this edge\n";
+	            return;
+	        }
+	        vertex* newStart = (*startI).second;
+	        vertex* newEnd = (*endI).second;
+	        edge* newEdge = new edge(newStart, newEnd, weighted, e->getWeight());
+	        E.insert(pair<long long, edge*>(E.size(), newEdge));
+	        map<long long, edge*> newOutEdges = newStart->getOutEdges();
+	        newOutEdges.insert(pair<long long, edge*>(newOutEdges.size(), newEdge));
+	        newStart->setOutEdges(newOutEdges);
+	        map<long long, edge*> newInEdges = newEnd->getInEdges();
+	        newInEdges.insert(pair<long long, edge*>(newInEdges.size(), newEdge));
+	        newEnd->setInEdges(newInEdges);
+	        if (!oriented) {
+	            edge* newREdge = new edge(newEnd, newStart, weighted, e->getWeight());
+	            E.insert(pair<long long, edge*>(E.size(), newREdge));
+	            map<long long, edge*> newROutEdges = newEnd->getOutEdges();
+	            newOutEdges.insert(pair<long long, edge*>(newROutEdges.size(), newREdge));
+	            newEnd->setOutEdges(newROutEdges);
+	            map<long long, edge*> newRInEdges = newStart->getInEdges();
+	            newRInEdges.insert(pair<long long, edge*>(newRInEdges.size(), newREdge));
+	            newStart->setInEdges(newRInEdges);
+	        }
+	    }
+	
+	    graph(string s) {
+	        V = map<long long, vertex*>();
+	        E = map<long long, edge*>();
+	        stringstream ss = stringstream(s);
+	        ss >> weighted >> oriented >> multy;
+	        string regime = "none";
+	        while(!ss.eof()){
+	            string line;
+	            getline(ss, line, '\n');
+	            if (line == "vertexes:"){
+	                regime = "vertexes";
+	                continue;
+	            }
+	            if (line == "edges:"){
+	                regime = "edges";
+	                continue;
+	            }
+	            if (regime == "vertexes"){
+	                char delim = line[line.size() - 1];
+	                line = line.substr(0, line.size() - 1);
+	                stringstream linereader = stringstream(line);
+	                long long vernum;
+	                if (!linereader.eof()) {
+	                    linereader >> vernum;
+	                    add(vernum);
+	                }
+	                if (delim == '.'){
+	                    regime = "none";
+	                }
+	                continue;
+	            }
+	            if (regime == "edges"){
+	                char delim = line[line.size() - 1];
+	                line = line.substr(0, line.size() - 1);
+	                stringstream linereader = stringstream(line);
+	                if (weighted) {
+	                    long long ver1num;
+	                    long long ver2num;
+	                    double w;
+	                    if (!linereader.eof()) {
+	                        linereader >> ver1num >> ver2num >> w;
+	                        add(ver1num, ver2num, w);
+	                    }
+	                }
+	                else{
+	                    long long ver1num;
+	                    long long ver2num;
+	                    linereader >> ver1num >> ver2num;
+	                    add(ver1num, ver2num);
+	                }
+	                if (delim == '.'){
+	                    regime = "none";
+	                }
+	                continue;
+	            }
+	            if (regime == "none"){
+	                continue;
+	            }
+	        }
+	        /*example:
+	            0 0 0
+	            vertexes:
+	                1,
+	                2,
+	                3.
+	            edges:
+	                1 2.
+	            vertexes:
+	                4.
+	            edges:
+	                3 4,
+	                1 3.
+	        */
+	    }
+	
+	    void eraseEdge(long long id) {
+	        map<long long, edge*>::iterator ei = find_if(E.begin(), E.end(),
+	            [id](pair<long long, edge*> e) {return e.second->getId() == id; });
+	        if (ei == E.end()) {
+	            throw "Error: this edge doesn't exist\n";
+	            return;
+	        }
+	        map<long long, edge*> startsOut = ei->second->getStart()->getOutEdges();
+	        startsOut.erase(ei->second->getId());
+	        ei->second->getStart()->setOutEdges(startsOut);
+	        map<long long, edge*> endsIn = ei->second->getEnd()->getInEdges();
+	        endsIn.erase(ei->second->getId());
+	        ei->second->getEnd()->setInEdges(endsIn);
+	        if (!oriented) {
+	            map<long long, edge*> startsIn = ei->second->getStart()->getInEdges();
+	            startsIn.erase(ei->second->getId() + 1);
+	            ei->second->getStart()->setInEdges(startsIn);
+	            map<long long, edge*> endsOut = ei->second->getEnd()->getOutEdges();
+	            endsOut.erase(ei->second->getId() + 1);
+	            ei->second->getEnd()->setInEdges(endsOut);
+	        }
+	        E.erase(id);
+	        E.erase(id + 1);
+	    }
+	
+	    void eraseEdge(map<long long, edge*>::iterator ei) {
+	        map<long long, edge*> startsOut = ei->second->getStart()->getOutEdges();
+	        startsOut.erase(ei->second->getId());
+	        ei->second->getStart()->setOutEdges(startsOut);
+	        map<long long, edge*> endsIn = ei->second->getEnd()->getInEdges();
+	        endsIn.erase(ei->second->getId());
+	        ei->second->getEnd()->setInEdges(endsIn);
+	        E.erase(ei->second->getId());
+	        if (!oriented) {
+	            map<long long, edge*> startsIn = ei->second->getStart()->getInEdges();
+	            startsIn.erase(ei->second->getId() + 1);
+	            ei->second->getStart()->setInEdges(startsIn);
+	            map<long long, edge*> endsOut = ei->second->getEnd()->getOutEdges();
+	            endsOut.erase(ei->second->getId() + 1);
+	            ei->second->getEnd()->setInEdges(endsOut);
+	            E.erase(ei->second->getId() + 1);
+	        }
+	    }
+	    
+	    void eraseVertex(long long id) {
+	        map<long long, vertex*>::iterator vi = find_if(V.begin(), V.end(),
+	            [id](pair<long long, vertex*> v) {return v.second->getId() == id; });
+	        while (!vi->second->getInEdges().empty()) {
+	            eraseEdge(vi->second->getInEdges().begin());
+	        }
+	        while (!vi->second->getOutEdges().empty()) {
+	            eraseEdge(vi->second->getOutEdges().begin());
+	        }
+	        V.erase(vi);
+	    }
+	
+	    string printForm() {
+	        string ans = "";
+	        stringstream ss;
+	        ss << noboolalpha << weighted << " " << oriented << " " << multy << "\n";
+	        ans += ss.str();
+	        if (!V.empty()) {
+	            ans += "vertexes:\n";
+	            for (map<long long, vertex*>::iterator i = V.begin(); i != V.end(); i++) {
+	                ans += to_string(i->first) + ",\n";
+	            }
+	            ans[ans.size() - 2] = '.';
+	        }
+	        if (!V.empty()) {
+	            ans += "edges:\n";
+	            for (map<long long, edge*>::iterator i = E.begin(); i != E.end(); i++) {
+	                if (!weighted) {
+	                    ans += to_string(i->second->getStart()->getId()) + " " + to_string(i->second->getEnd()->getId()) + ",\n";
+	                }
+	                else {
+	                    ans += to_string(i->second->getStart()->getId()) + " " +
+	                        to_string(i->second->getEnd()->getId()) + " " + to_string(i->second->getWeight()) + ",\n";
+	                }
+	            }
+	            ans[ans.size() - 2] = '.';
+	        }
+	        return ans;
+	    }
+	
+	    void setVertexes(map<long long, vertex*> V) {
+	        this->V = V;
+	    }
+	
+	    map<long long, vertex*> getVertexes() {
+	        return V;
+	    }
+	
+	    void setEdges(map<long long, edge*> E) {
+	        this->E = E;
+	    }
+	
+	    map<long long, edge*> getEdges() {
+	        return E;
+	    }
+	};
+\end{minted}
+
+
+
+
+\section{Список смежности Ia(1)}
+\subsection{Задание}
+Для каждой вершины орграфа вывести её степень.
+\subsection{Решение}
+\begin{minted}{cpp}
+#include <iostream>
+#include "F:\5th semester\graphs\graph\graph\graph.h"
+#include <fstream>
+#include "F:\5th semester\graphs\graph\graph\graphInterface.h"
+using namespace std;
+int main() {
+	graph g;
+	g = graphInterface();
+	map<long long, vertex*> V = g.getVertexes();
+	for (map<long long, vertex*>::iterator i = V.begin(); i != V.end(); i++) {
+		if (g.isOriented()) {
+			cout << i->first << ": " << i->second->getInEdges().size() << ", " << i->second->getOutEdges().size() << "\n";
+		}
+		else {
+			cout << i->first << ": " << i->second->getInEdges().size() << "\n";
+		}
+	}
+}
+\end{minted}
+\subsection{Пример}
+\begin{minted}{text}
+open example1.txt
+Result:
+0 1 0
+vertexes:
+1,
+2,
+3,
+4,
+5,
+6,
+7.
+edges:
+1 2,
+2 3,
+1 4,
+7 2,
+5 7,
+6 4.
+
+-----------------------------------
+exit
+1: 0, 2
+2: 2, 1
+3: 1, 0
+4: 2, 0
+5: 0, 1
+6: 0, 1
+7: 1, 1
+\end{minted}
+
+
+
+
+\section{Список смежности Ia(2)}
+\subsection{Задание}
+Определить, можно ли попасть из вершины u в вершину v через одну какую-либо вершину орграфа. Вывести такую вершину.
+\subsection{Решение}
+\begin{minted}{cpp}
+#include <iostream>
+#include "F:\5th semester\graphs\graph\graph\graph.h"
+#include <fstream>
+#include "F:\5th semester\graphs\graph\graph\graphInterface.h"
+using namespace std;
+int main() {
+	graph g;
+	g = graphInterface();
+	long long un;
+	long long vn;
+	cin >> un >> vn;
+	vertex* u = g.getVertexes()[un];
+	map<long long, edge*> ti = u->getOutEdges();
+	for (map<long long, edge*>::iterator i = ti.begin(); i != ti.end(); i++) {
+		map<long long, edge*> tj = i->second->getEnd()->getOutEdges();
+		for (map<long long, edge*>::iterator j = tj.begin(); j != tj.end(); j++) {
+			if (j->second->getEnd()->getId() == vn) {
+				cout << i->second->getEnd()->getId();
+				return 0;
+			}
+		}
+	}
+	cout << "There is no such way\n";
+}
+\end{minted}
+\subsection{Пример}
+\begin{minted}{text}
+open example1.txt
+Result:
+0 1 0
+vertexes:
+1,
+2,
+3,
+4,
+5,
+6,
+7.
+edges:
+1 2,
+2 3,
+1 4,
+7 2,
+5 7,
+6 4.
+
+-----------------------------------
+exit
+1 3
+2
+\end{minted}
+
+
+
+
+\section{Список смежности Iб: несколько графов }
+\subsection{Задание}
+Построить граф, являющийся объединением двух заданных.
+\subsection{Решение}
+\begin{minted}{cpp}
+#include <iostream>
+#include "F:\5th semester\graphs\graph\graph\graph.h"
+#include <fstream>
+#include "F:\5th semester\graphs\graph\graph\graphInterface.h"
+using namespace std;
+int main() {
+	graph g1;
+	graph g2;
+	g1 = graphInterface();
+	g2 = graphInterface();
+	if ((g1.isOriented() == g2.isOriented()) && (g1.isMulty() == g2.isMulty()) && (g1.isWeighted() == g2.isWeighted())) {
+		graph g = graph();
+		map<long long, vertex*> tv = g1.getVertexes();
+		map<long long, vertex*> v = g2.getVertexes();
+		for (map<long long, vertex*>::iterator i = v.begin(); i != v.end(); i++) {
+			tv.insert(*i);
+		}
+		map<long long, edge*> te = g1.getEdges();
+		map<long long, edge*> e = g2.getEdges();
+		for (map<long long, edge*>::iterator i = e.begin(); i != e.end(); i++) {
+			te.insert(*i);
+		}
+		g.setType(g1.isWeighted(), g1.isOriented(), g1.isMulty());
+		g.setVertexes(tv);
+		g.setEdges(te);
+		cout << g.printForm();
+	}
+	else {
+		cout << "The graphs are of different types\n";
+		return 0;
+	}
+}
+\end{minted}
+\subsection{Пример}
+\begin{minted}{text}
+open example1.txt
+Result:
+0 1 0
+vertexes:
+1,
+2,
+3,
+4,
+5,
+6,
+7.
+edges:
+1 2,
+2 3,
+1 4,
+7 2,
+5 7,
+6 4.
+
+-----------------------------------
+exit
+open example1.txt
+Result:
+0 1 0
+vertexes:
+1,
+2,
+3,
+4,
+5,
+6,
+7.
+edges:
+1 2,
+2 3,
+1 4,
+7 2,
+5 7,
+6 4.
+
+-----------------------------------
+addedge 3 4
+exit
+0 1 0
+vertexes:
+1,
+2,
+3,
+4,
+5,
+6,
+7.
+edges:
+1 2,
+2 3,
+1 4,
+7 2,
+5 7,
+6 4,
+1 2,
+2 3,
+1 4,
+7 2,
+5 7,
+6 4,
+3 4.
+\end{minted}
+
+
+
+
+
+\section{Обходы графа II(1)}
+\subsection{Задание}
+Проверить граф на ацикличность.
+\subsection{Решение}
+\begin{minted}{cpp}
+#include <iostream>
+#include "F:\5th semester\graphs\graph\graph\graph.h"
+#include <fstream>
+#include <stack>
+#include "F:\5th semester\graphs\graph\graph\graphInterface.h"
+using namespace std;
+bool acycle(graph g) {
+	map<long long, vertex*> V = g.getVertexes();
+	stack<long long> s = stack<long long>();
+	map<long long, long long> color = map<long long, long long>();
+	for (map<long long, vertex*>::iterator i = V.begin(); i != V.end(); i++) {
+		color.insert(make_pair(i->first, 0));
+	}
+	long long cc = 0;
+	while (true) {
+		map<long long, vertex*>::iterator b = V.begin();
+		map<long long, vertex*>::iterator e = V.end();
+		if (find_if(b, e, [color](pair<long long, vertex*> i) {return color.at(i.second->getId()) == 0; }) == e) {
+			break;
+		}
+		if (s.empty()) {
+			s.push(find_if(b, e, [color](pair<long long, vertex*> i) {return color.at(i.second->getId()) == 0; })->first);
+			cc++;
+		}
+		map<long long, edge*> t = V[s.top()]->getOutEdges();
+		long long tv = s.top();
+		color[tv] = cc;
+		s.pop();
+		for (map<long long, edge*>::iterator i = t.begin(); i != t.end(); i++) {
+			if (color[i->second->getEnd()->getId()] == cc) {
+				return false;
+			}
+			s.push(i->second->getEnd()->getId());
+		}
+	}
+	return true;
+}
+int main() {
+	graph g;
+	g = graphInterface();
+	cout << acycle(g);
+}
+\end{minted}
+\subsection{Пример}
+\begin{minted}{text}
+open example1.txt
+Result:
+0 1 0
+vertexes:
+1,
+2,
+3,
+4,
+5,
+6,
+7.
+edges:
+1 2,
+2 3,
+1 4,
+7 2,
+5 7,
+6 4.
+
+-----------------------------------
+exit
+1
+\end{minted}
+
+
+
+
+
+\section{Обходы графа II(2)}
+\subsection{Задание}
+Выяснить, является ли граф связным.
+\subsection{Решение}
+\begin{minted}{cpp}
+#include <iostream>
+#include "F:\5th semester\graphs\graph\graph\graph.h"
+#include <fstream>
+#include <stack>
+#include "F:\5th semester\graphs\graph\graph\graphInterface.h"
+using namespace std;
+long long parts(graph g) {
+	map<long long, vertex*> V = g.getVertexes();
+	stack<long long> s = stack<long long>();
+	map<long long, long long> color = map<long long, long long>();
+	for (map<long long, vertex*>::iterator i = V.begin(); i != V.end(); i++) {
+		color.insert(make_pair(i->first, 0));
+	}
+	long long cc = 0;
+	while (true) {
+		map<long long, vertex*>::iterator b = V.begin();
+		map<long long, vertex*>::iterator e = V.end();
+		if (find_if(b, e, [color](pair<long long, vertex*> i) {return color.at(i.second->getId()) == 0; }) == e) {
+			break;
+		}
+		if (s.empty()) {
+			s.push(find_if(b, e, [color](pair<long long, vertex*> i) {return color.at(i.second->getId()) == 0; })->first);
+			cc++;
+		}
+		map<long long, edge*> t = V[s.top()]->getOutEdges();
+		long long tv = s.top();
+		color[tv] = cc;
+		s.pop();
+		for (map<long long, edge*>::iterator i = t.begin(); i != t.end(); i++) {
+			if (color[i->second->getEnd()->getId()] == cc) {
+				continue;
+			}
+			s.push(i->second->getEnd()->getId());
+		}
+		t = V[tv]->getInEdges();
+		for (map<long long, edge*>::iterator i = t.begin(); i != t.end(); i++) {
+			if (color[i->second->getStart()->getId()] == cc) {
+				continue;
+			}
+			s.push(i->second->getStart()->getId());
+		}
+	}
+	return cc;
+}
+int main() {
+	graph g;
+	g = graphInterface();
+	cout << parts(g);
+}
+\end{minted}
+\subsection{Пример}
+\begin{minted}{text}
+open example1.txt
+Result:
+0 1 0
+vertexes:
+1,
+2,
+3,
+4,
+5,
+6,
+7.
+edges:
+1 2,
+2 3,
+1 4,
+7 2,
+5 7,
+6 4.
+
+-----------------------------------
+exit
+1
+\end{minted}
+
+
+
+
+
+\section{Каркас III}
+\subsection{Задание}
+Дан взвешенный неориентированный граф из N вершин и M ребер. Требуется найти в нем каркас минимального веса.
+\subsection{Решение}
+\begin{minted}{cpp}
+#include <iostream>
+#include "F:\5th semester\graphs\graph\graph\graph.h"
+#include <fstream>
+#include <stack>
+#include <queue>
+#include "F:\5th semester\graphs\graph\graph\graphInterface.h"
+using namespace std;
+graph prim(graph g) {
+	if (!(g.isWeighted() && !g.isMulty() && !g.isOriented())) {
+		return graph();
+	}
+	map<long long, vertex*> V = g.getVertexes();
+	map<long long, edge*> E = map<long long, edge*>();
+	map<long long, edge*> rest = map<long long, edge*>();
+	queue<long long> q = queue<long long>();
+	map<long long, long long> color = map<long long, long long>();
+	for (map<long long, vertex*>::iterator i = V.begin(); i != V.end(); i++) {
+		color.insert(make_pair(i->first, 0));
+	}
+	long long cc = 1;
+	while (true) {
+		map<long long, vertex*>::iterator b = V.begin();
+		map<long long, vertex*>::iterator e = V.end();
+		if (find_if(b, e, [color](pair<long long, vertex*> i) {return color.at(i.second->getId()) == 0; }) == e) {
+			break;
+		}
+		if (q.empty()) {
+			q.push(find_if(b, e, [color](pair<long long, vertex*> i) {return color.at(i.second->getId()) == 0; })->first);
+			rest.clear();
+		}
+		map<long long, edge*> t1 = V[q.front()]->getOutEdges();
+		long long tv = q.front();
+		color[tv] = cc;
+		q.pop();
+		bool f = 0;
+		for (map<long long, edge*>::iterator i = t1.begin(); i != t1.end(); i++) {
+			if (color[i->second->getEnd()->getId()] != cc) {
+				rest.insert(*i);
+			}
+			f = f || color[i->second->getEnd()->getId()] != cc;
+			q.push(i->second->getEnd()->getId());
+		}
+		if (!f) {
+			break;
+		}
+		long long mn = LLONG_MAX;
+		long long mnId = 0;
+		for (map<long long, edge*>::iterator i = rest.begin(); i != rest.end(); i++) {
+			if (i->second->getWeight() < mn) {
+				mn = i->second->getWeight();
+				mnId = i->first;
+			}
+		}
+		E.insert(make_pair(mnId, rest[mnId]));
+		rest.erase(mnId);
+	}
+	graph G = g;
+	G.setEdges(E);
+	return G;
+}
+int main() {
+	graph g;
+	g = graphInterface();
+	cout << prim(g).printForm();
+}
+\end{minted}
+\subsection{Пример}
+\begin{minted}{text}
+open example3.txt
+Result:
+1 1 0
+vertexes:
+1,
+2,
+3,
+4,
+5,
+6,
+7.
+edges:
+1 2 3.000000,
+2 3 4.000000,
+3 1 0.000000.
+
+-----------------------------------
+exit
+0
+\end{minted}
+
+
+
+
+
+\section{Веса IV a}
+\subsection{Задание}
+Определить множество вершин орграфа, расстояние от которых до заданной вершины не более N.
+\subsection{Решение}
+\begin{minted}{cpp}
+pair<map<long long, double>, map<long long, long long> > dijkstra(graph g, vertex v) {
+	map<long long, bool> used;
+	map<long long, double> d;
+	map<long long, long long> p;
+	auto t1 = g.getVertexes();
+	for (map<long long, vertex*>::iterator i = t1.begin(); i != t1.end(); i++) {
+		used.insert(make_pair(i->second->getId(), false));
+		d.insert(make_pair(i->second->getId(), 1e9));
+		p.insert(make_pair(i->second->getId(), -1));
+	}
+	vector<vector<edge> > ans = vector<vector<edge> >();
+	d[v.getId()] = 0;
+	set<long long> toProcess = set<long long>();
+	toProcess.insert(v.getId());
+	while (!toProcess.empty()) {
+		vertex cur;
+		long long curId;
+		long long mn = 1e18;
+		for (set<long long>::iterator i = toProcess.begin(); i != toProcess.end(); i++) {
+			if (d[*i] < mn) {
+				mn = d[*i];
+				cur = *g.getVertexes()[*i];
+			}
+		}
+		curId = cur.getId();
+		toProcess.erase(curId);
+		if (used[curId]) {
+			continue;
+		}
+		used[curId] = true;
+		auto t2 = cur.getOutEdges();
+		for (map<long long, edge*>::iterator i = t2.begin(); i != t2.end(); i++) {
+			edge* e = i->second;
+			long long neibourId = e->getEnd()->getId();
+			long long res = d[curId] + e->getWeight();
+			if (d[neibourId] > res) {
+				d[neibourId] = res;
+				p[neibourId] = curId;
+			}
+			toProcess.insert(neibourId);
+		}
+	}
+	return make_pair(d, p);
+}
+
+vector<list<edge> > dijkstraRecovery(graph g, map<long long, long long> p, vertex v) {
+	vector<list<edge> > ans = vector<list<edge> >();
+	map<long long, vertex*> V = g.getVertexes();
+	map<long long, edge*> E = g.getEdges();
+	long long vi = v.getId();
+	for (map<long long, vertex*>::iterator i = V.begin(); i != V.end(); i++) {
+		long long k = i->first;
+		list<edge> t = list<edge>();
+		while (k != vi) {
+			long long pk = p[k];
+			map<long long, edge*>::iterator ns = find_if(E.begin(), E.end(), [pk, k](pair<long long, edge*> e)
+				{return e.second->getStart()->getId() == pk && e.second->getEnd()->getId() == k; });
+			if (ns == E.end()) {
+				t.clear();
+				ans.push_back(t);
+				break;
+			}
+			k = pk;
+			t.push_back(*(ns->second));
+		}
+		ans.push_back(t);
+	}
+	return ans;
+}
+\end{minted}
+\subsection{Пример}
+\begin{minted}{text}
+open example6.txt
+Result:
+1 1 0
+vertexes:
+1,
+2,
+3,
+4,
+5,
+6,
+7.
+edges:
+1 2 100.000000,
+1 3 100.000000,
+2 3 50.000000,
+2 4 50.000000,
+3 4 100.000000,
+3 5 50.000000,
+4 5 75.000000,
+4 6 75.000000,
+5 6 125.000000.
+
+-----------------------------------
+exit
+151
+2 4 5 6
+\end{minted}
+
+
+
+
+
+\section{Веса IV b}
+\subsection{Задание}
+Вывести все кратчайшие пути из вершины u.
+\subsection{Решение}
+\begin{minted}{cpp}
+vector<list<edge> > dijkstraRecovery(graph g, map<long long, long long> p, vertex v) {
+	vector<list<edge> > ans = vector<list<edge> >();
+	map<long long, vertex*> V = g.getVertexes();
+	map<long long, edge*> E = g.getEdges();
+	long long vi = v.getId();
+	for (map<long long, vertex*>::iterator i = V.begin(); i != V.end(); i++) {
+		long long k = i->first;
+		list<edge> t = list<edge>();
+		while (k != vi) {
+			long long pk = p[k];
+			map<long long, edge*>::iterator ns = find_if(E.begin(), E.end(), [pk, k](pair<long long, edge*> e)
+				{return e.second->getStart()->getId() == pk && e.second->getEnd()->getId() == k; });
+			if (ns == E.end()) {
+				t.clear();
+				ans.push_back(t);
+				break;
+			}
+			k = pk;
+			t.push_back(*(ns->second));
+		}
+		ans.push_back(t);
+	}
+	return ans;
+}
+
+pair<map<long long, double>, map<long long, long long> > fordBellman(graph g, vertex v) {
+	map<long long, double> d;
+	map<long long, long long> p;
+	auto t1 = g.getVertexes();
+	for (map<long long, vertex*>::iterator i = t1.begin(); i != t1.end(); i++) {
+		d.insert(make_pair(i->second->getId(), 1e18));
+		p.insert(make_pair(i->second->getId(), -1));
+	}
+	vector<vector<edge> > ans = vector<vector<edge> >();
+	d[v.getId()] = 0;
+	map<long long, edge*> E = g.getEdges();
+	for (int k = 0; k < g.getVertexes().size(); k++) {
+		for (map<long long, edge*>::iterator i = E.begin(); i != E.end(); i++) {
+			edge* e = i->second;
+			long long curId = e->getStart()->getId();
+			long long neibourId = e->getEnd()->getId();
+			long long res = d[curId] + e->getWeight();
+			if (d[curId] < 1e17 && d[neibourId] > res) {
+				d[neibourId] = res;
+				p[neibourId] = curId;
+			}
+		}
+	}
+	return make_pair(d, p);
+}
+\end{minted}
+\subsection{Пример}
+\begin{minted}{text}
+open example6.txt
+Result:
+1 1 0
+vertexes:
+1,
+2,
+3,
+4,
+5,
+6,
+7.
+edges:
+1 2 100.000000,
+1 3 100.000000,
+2 3 50.000000,
+2 4 50.000000,
+3 4 100.000000,
+3 5 50.000000,
+4 5 75.000000,
+4 6 75.000000,
+5 6 125.000000.
+
+-----------------------------------
+exit
+1 2
+
+1 3
+\end{minted}
+
+
+
+
+
+\section{Веса IV c}
+\subsection{Задание}
+Вывести кратчайший путь из вершины u до вершины v.
+\subsection{Решение}
+\begin{minted}{cpp}
+pair<map<long long, map<long long, double> >, map<long long, map<long long, long long> > > floydWarshall(graph g, vertex v) {
+	map<long long, map<long long, double> > d;
+	map<long long, map<long long, long long> > p;
+	auto V = g.getVertexes();
+	for (map<long long, vertex*>::iterator i = V.begin(); i != V.end(); i++) {
+		for (map<long long, vertex*>::iterator j = V.begin(); j != V.end(); j++) {
+			d[i->second->getId()][j->second->getId()] = 1e18;
+			p[i->second->getId()][j->second->getId()] = -1;
+			if (i->second->getId() == j->second->getId()) {
+				d[i->second->getId()][j->second->getId()] = 0;
+			}
+		}
+	}
+	auto E = g.getEdges();
+	for (map<long long, edge*>::iterator i = E.begin(); i != E.end(); i++) {
+		d[i->second->getStart()->getId()][i->second->getEnd()->getId()] = i->second->getWeight();
+		p[i->second->getStart()->getId()][i->second->getEnd()->getId()] = i->second->getStart()->getId();
+	}
+	for (map<long long, vertex*>::iterator k = V.begin(); k != V.end(); k++) {
+		map<long long, map<long long, double> > newD = d;
+		for (map<long long, vertex*>::iterator i = V.begin(); i != V.end(); i++) {
+			for (map<long long, vertex*>::iterator j = V.begin(); j != V.end(); j++) {
+				if (d[i->second->getId()][j->second->getId()] >
+					d[i->second->getId()][k->second->getId()] + d[k->second->getId()][j->second->getId()])
+				{
+					newD[i->second->getId()][j->second->getId()] = 
+						d[i->second->getId()][k->second->getId()] + d[k->second->getId()][j->second->getId()];
+					p[i->second->getId()][j->second->getId()] = k->second->getId();
+				}
+				else
+				{
+					newD[i->second->getId()][j->second->getId()] = d[i->second->getId()][j->second->getId()];
+				}
+			}
+		}
+		d = newD;
+	}
+	for (map<long long, edge*>::iterator i = E.begin(); i != E.end(); i++) {
+		p[i->second->getStart()->getId()][i->second->getEnd()->getId()] = -1;
+	}
+	return make_pair(d, p);
+}
+
+list<edge> floydWarshallRecovery(graph g, map<long long, map<long long, long long> > p, vertex* v1, vertex* v2) {
+	vector<list<edge> > ans = vector<list<edge> >();
+	map<long long, vertex*> V = g.getVertexes();
+	map<long long, edge*> E = g.getEdges();
+	long long v1Id = v1->getId();
+	long long v2Id = v2->getId();
+	long long midId = (p[v1Id])[v2Id];
+	if (midId != -1) {
+		vertex* mid = V[midId];
+		list<edge> t1 = floydWarshallRecovery(g, p, v1, mid);
+		list<edge> t2 = floydWarshallRecovery(g, p, mid, v2);
+		int t1s = t1.size();
+		t1.insert(t1.end(), t2.begin(), t2.end());
+		if (t1s != 0 && t2.size() != 0) {
+			return t1;
+		}
+		else {
+			return list<edge>();
+		}
+	}
+	else {
+		map<long long, edge*>::iterator t = find_if(E.begin(), E.end(), [v1Id, v2Id](pair<long long, edge*> x)
+			{return x.second->getStart()->getId() == v1Id && x.second->getEnd()->getId() == v2Id; });
+		if (t != E.end()) {
+			return list<edge>(1, *(t->second));
+		}
+		else {
+			return list<edge>();
+		}
+	}
+}
+\end{minted}
+\subsection{Пример}
+\begin{minted}{text}
+open example6.txt
+Result:
+1 1 0
+vertexes:
+1,
+2,
+3,
+4,
+5,
+6,
+7.
+edges:
+1 2 100.000000,
+1 3 100.000000,
+2 3 50.000000,
+2 4 50.000000,
+3 4 100.000000,
+3 5 50.000000,
+4 5 75.000000,
+4 6 75.000000,
+5 6 125.000000.
+
+-----------------------------------
+exit
+1 2
+2 4
+4 6
+\end{minted}
+
+
+
+
+
+\section{V Максимальный поток}
+\subsection{Задание}
+Решить задачу на нахождение максимального потока любым алгоритмом. 
+\subsection{Решение}
+\begin{minted}{cpp}
+
+list<list<pair<edge, double> > > dfs(graph g, vertex s, vertex e, vertex v, map<long long, bool> used, list<pair<edge, double> > path) {
+	if (v.getId() == e.getId()) {
+		return list<list<pair<edge, double> > >(1, path);
+	}
+	auto oe = v.getOutEdges();
+	if (oe.size() == 0) {
+		return list<list<pair<edge, double> > >();
+	}
+	used[v.getId()] = true;
+	list<list<pair<edge, double> > > ans = list<list<pair<edge, double> > >();
+	for (auto i = oe.begin(); i != oe.end(); i++) {
+		vertex* newV = i->second->getEnd();
+		if (!used[newV->getId()]) {
+			if (v.getId() != s.getId()) {
+				path.push_back(make_pair(*i->second, min(i->second->getWeight(), path.back().second)));
+			}
+			else {
+				path.push_back(make_pair(*i->second, i->second->getWeight()));
+			}
+			list<list<pair<edge, double> > > newPathes = dfs(g, s, e, *newV, used, path);
+			ans.insert(ans.end(), newPathes.begin(), newPathes.end());
+			path.pop_back();
+		}
+	}
+	return ans;
+}
+
+double fordFalkerson(graph g, vertex s, vertex e) {
+	map<long long, vertex*> V = g.getVertexes();
+	map<long long, edge*> E = g.getEdges();
+	map<long long, bool> used = map<long long, bool>();
+	for (auto i = V.begin(); i != V.end(); i++) {
+		used.insert(make_pair(i->first, false));
+	}
+	double ans = 0;
+	map<long long, double> c = map<long long, double>();
+	for (auto i = E.begin(); i != E.end(); i++) {
+		c.insert(make_pair(i->first, i->second->getWeight()));
+	}
+	list<list<pair<edge, double> > > pathes = dfs(g, s, e, s, used, list<pair<edge, double> >());
+	for (auto i = pathes.begin(); i != pathes.end(); i++) {
+		double f = i->back().second;
+		for (auto j = i->begin(); j != i->end(); j++) {
+			f = min(f, c[j->first.getId()]);
+		}
+		for (auto j = i->begin(); j != i->end(); j++) {
+			c[j->first.getId()] -= f;
+		}
+		ans += f;
+	}
+	return ans;
+}
+\end{minted}
+\subsection{Пример}
+\begin{minted}{text}
+open example6.txt
+Result:
+1 1 0
+vertexes:
+1,
+2,
+3,
+4,
+5,
+6,
+7.
+edges:
+1 2 100.000000,
+1 3 100.000000,
+2 3 50.000000,
+2 4 50.000000,
+3 4 100.000000,
+3 5 50.000000,
+4 5 75.000000,
+4 6 75.000000,
+5 6 125.000000.
+
+-----------------------------------
+exit
+200
+\end{minted}
+\end{document}

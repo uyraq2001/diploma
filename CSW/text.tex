@@ -1,0 +1,26 @@
+\documentclass[a4paper]{article}
+% for dvipdfm:
+% \def\pgfsysdriver{pgfsys-dvipdfm.def}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}% <-- moves axis labels near ticklabels (respects tick label widths)
+\begin{document}
+\begin{figure}
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		axis x line=center,
+	  	axis y line=center,
+		xlabel=Degree,
+		ylabel=Count,
+		xmin=0,xmax=6,
+		ymin=-1,ymax=10,
+		every axis plot/.append style={ultra thick}
+		]
+	\addplot[color=red,mark=*,only marks]
+	table[x=lnx,y=lny] {E:\\CSW\\results\\data_p_1_1.txt}{};
+	\addplot[color=blue, minor y tick num = 1000]{-2.9*x+11.5};
+	\end{axis}
+\end{tikzpicture}
+\caption{poisson disterbution by 1}
+\end{figure}
+\end{document}	

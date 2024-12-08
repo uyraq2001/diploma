@@ -1,0 +1,143 @@
+\documentclass[bachelor, och, pract]{SCWorks}
+% параметр - тип обучения - одно из значений:
+%    spec     - специальность
+%    bachelor - бакалавриат (по умолчанию)
+%    master   - магистратура
+% параметр - форма обучения - одно из значений:
+%    och   - очное (по умолчанию)
+%    zaoch - заочное
+% параметр - тип работы - одно из значений:
+%    referat    - реферат
+%    coursework - курсовая работа (по умолчанию)
+%    diploma    - дипломная работа
+%    pract      - отчет по практике
+%    nir      - отчет о научно-исследовательской работе
+%    autoref    - автореферат выпускной работы
+%    assignment - задание на выпускную квалификационную работу
+%    review     - отзыв руководителя
+%    critique   - рецензия на выпускную работу
+% параметр - включение шрифта
+%    times    - включение шрифта Times New Roman (если установлен)
+%               по умолчанию выключен
+\usepackage[T2A]{fontenc}
+\usepackage[cp1251]{inputenc}
+\usepackage{graphicx}
+\usepackage{tempora}
+\usepackage{cmap}
+
+\usepackage[sort,compress]{cite}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{fancyvrb}
+\usepackage{longtable}
+\usepackage{minted}
+\usepackage{array}
+\usepackage[english,russian]{babel}
+
+
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}% <-- moves axis labels near ticklabels (respects tick label widths)
+\usepackage{listings}
+\usepackage{color}
+\usepackage{subfigure}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\setcounter{tocdepth}{4} 
+\setcounter{secnumdepth}{4}
+
+
+\newcommand{\eqdef}{\stackrel {\rm def}{=}}
+\newcommand{\No}{\textnumero}
+\newtheorem{lem}{Лемма}
+\setminted{style=bw,
+	linenos=true,
+	breaklines=true,
+	numbersep=5pt,
+	tabsize=2,
+	fontsize=\small,
+	bgcolor=white}
+\setmintedinline{style=bw,
+	bgcolor=white,
+	fontsize=\normalsize
+	}	
+\pgfplotsset{every axis legend/.append style={at={(0.6,1)},anchor=south west}}
+%\pgfplotsset{every axis title/.style={at={(0.5,1)},above,yshift=6pt}}
+\begin{document}
+
+% Кафедра (в родительном падеже)
+\chair{математической кибернетики и компьютерных наук}
+
+% Тема работы
+\title{Исследование индекса дружбы узлов растущих сетей построенных по моделям с предпочтительным присоединением}
+
+% Курс
+\course{4}
+
+% Группа
+\group{411}
+
+% Факультет (в родительном падеже) (по умолчанию "факультета КНиИТ")
+%\department{факультета КНиИТ}
+
+% Специальность/направление код - наименование
+\napravlenie{02.03.02 "--- Фундаментальная информатика и информационные технологии}
+%\napravlenie{02.03.01 "--- Математическое обеспечение и администрирование информационных систем}
+%\napravlenie{09.03.01 "--- Информатика и вычислительная техника}
+%\napravlenie{09.03.04 "--- Программная инженерия}
+%\napravlenie{10.05.01 "--- Компьютерная безопасность}
+
+% Для студентки. Для работы студента следующая команда не нужна.
+%\studenttitle{Студентки}
+
+% Фамилия, имя, отчество в родительном падеже
+\author{Козырева Юрия Дмитриевича}
+
+% Заведующий кафедрой
+\chtitle{к.\,ф.-м.\,н., доцент} % степень, звание
+\chname{С.\,В.\,Миронов}
+
+%Научный руководитель (для реферата преподаватель проверяющий работу)
+\satitle{доцент} %должность, степень, звание
+\saname{С.\,В.\,Папшев}
+
+% Руководитель практики от организации (только для практики,
+% для остальных типов работ не используется)
+%\patitle{доцент, к.\,ф.-м.\,н.} 
+%\paname{С.\,В.\,Миронов}
+
+% Семестр (только для практики, для остальных
+% типов работ не используется)
+\term{7}
+
+% Наименование практики (только для практики, для остальных
+% типов работ не используется)
+\practtype{учебная, научно-исследовательская работа}
+
+% Продолжительность практики (количество недель) (только для практики,
+% для остальных типов работ не используется)
+\duration{14}
+
+% Даты начала и окончания практики (только для практики, для остальных
+% типов работ не используется)
+\practStart{01.09.2022}
+\practFinish{30.11.2022}
+
+% Год выполнения отчета
+\date{2022}
+
+\maketitle
+
+% Включение нумерации рисунков, формул и таблиц по разделам
+% (по умолчанию - нумерация сквозная)
+% (допускается оба вида нумерации)
+%\secNumbering
+
+
+
+
+\end{document}

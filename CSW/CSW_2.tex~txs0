@@ -1,0 +1,1260 @@
+\documentclass[bachelor, och, coursework, times]{SCWorks}
+% параметр - тип обучения - одно из значений:
+%    spec     - специальность
+%    bachelor - бакалавриат (по умолчанию)
+%    master   - магистратура
+% параметр - форма обучения - одно из значений:
+%    och   - очное (по умолчанию)
+%    zaoch - заочное
+% параметр - тип работы - одно из значений:
+%    referat    - реферат
+%    coursework - курсовая работа (по умолчанию)
+%    diploma    - дипломная работа
+%    pract      - отчет по практике
+%    nir      - отчет о научно-исследовательской работе
+%    autoref    - автореферат выпускной работы
+%    assignment - задание на выпускную квалификационную работу
+%    review     - отзыв руководителя
+%    critique   - рецензия на выпускную работу
+% параметр - включение шрифта
+%    times    - включение шрифта Times New Roman (если установлен)
+%               по умолчанию выключен
+\usepackage[T2A]{fontenc}
+\usepackage[cp1251]{inputenc}
+\usepackage{graphicx}
+\usepackage{tempora}
+
+\usepackage[sort,compress]{cite}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{fancyvrb}
+\usepackage{longtable}
+\usepackage{minted}
+\usepackage{array}
+\usepackage[english,russian]{babel}
+
+
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}% <-- moves axis labels near ticklabels (respects tick label widths)
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+
+\newcommand{\eqdef}{\stackrel {\rm def}{=}}
+\newcommand{\No}{\textnumero}
+\newtheorem{lem}{Лемма}
+\setminted{style=bw,
+	linenos=true,
+	breaklines=true,
+	numbersep=5pt,
+	tabsize=2,
+	fontsize=\small,
+	bgcolor=white}
+\setmintedinline{style=bw,
+	bgcolor=white,
+	fontsize=\normalsize
+	}	
+
+\begin{document}
+
+% Кафедра (в родительном падеже)
+\chair{математической кибернетики и компьютерных наук}
+
+% Тема работы
+\title{Реализация и анализ модели Барабаши"--~Альберт генерации случайного графа}
+
+% Курс
+\course{2}
+
+% Группа
+\group{211}
+
+% Факультет (в родительном падеже) (по умолчанию "факультета КНиИТ")
+%\department{факультета КНиИТ}
+
+% Специальность/направление код - наименование
+\napravlenie{02.03.02 "--- Фундаментальная информатика и информационные технологии}
+%\napravlenie{02.03.01 "--- Математическое обеспечение и администрирование информационных систем}
+%\napravlenie{09.03.01 "--- Информатика и вычислительная техника}
+%\napravlenie{09.03.04 "--- Программная инженерия}
+%\napravlenie{10.05.01 "--- Компьютерная безопасность}
+
+% Для студентки. Для работы студента следующая команда не нужна.
+%\studenttitle{Студентки}
+
+% Фамилия, имя, отчество в родительном падеже
+\author{Козырева Юрия Дмитриевича}
+
+% Заведующий кафедрой
+\chtitle{к.\,ф.-м.\,н., доцент} % степень, звание
+\chname{С.\,В.\,Миронов}
+
+%Научный руководитель (для реферата преподаватель проверяющий работу)
+\satitle{зав. каф., к.\,ф.-м.\,н., доцент} %должность, степень, звание
+\saname{С.\,В.\,Миронов}
+
+% Руководитель практики от организации (только для практики,
+% для остальных типов работ не используется)
+%\patitle{доцент, к.\,ф.-м.\,н.} 
+%\paname{С.\,В.\,Миронов}
+
+% Семестр (только для практики, для остальных
+% типов работ не используется)
+%\term{1}
+
+% Наименование практики (только для практики, для остальных
+% типов работ не используется)
+%\practtype{учебная}
+
+% Продолжительность практики (количество недель) (только для практики,
+% для остальных типов работ не используется)
+%\duration{16}
+
+% Даты начала и окончания практики (только для практики, для остальных
+% типов работ не используется)
+%\practStart{01.09.2019}
+%\practFinish{31.12.2019}
+
+% Год выполнения отчета
+\date{2020}
+
+\maketitle
+
+% Включение нумерации рисунков, формул и таблиц по разделам
+% (по умолчанию - нумерация сквозная)
+% (допускается оба вида нумерации)
+%\secNumbering
+
+
+\tableofcontents
+
+% Раздел "Обозначения и сокращения". Может отсутствовать в работе
+%\abbreviations
+
+% Раздел "Определения". Может отсутствовать в работе
+%\definitions
+
+% Раздел "Определения, обозначения и сокращения". Может отсутствовать в работе.
+% Если присутствует, то заменяет собой разделы "Обозначения и сокращения" и "Определения"
+%\defabbr
+
+% Раздел "Введение"
+\intro
+В повседневной жизни для решения многих задач часто используются случайные графы. Случайные графы нашли практическое применение во всех областях, где нужно смоделировать сложные сети "--- известно большое число случайных моделей графов, отражающих разнообразные типы сложных сетей в различных областях. Случайные графы применяются при моделировании и анализе биологических и социальных систем, сетей, а также при решении многих задач класса NP.
+
+Случайные графы впервые определены венгерскими математиками Эрдёшем и Реньи в книге 1959 года <<On Random Graphs>>\cite{RG}  и независимо Гильбертом в его статье <<Random graphs>>\cite{RG1}.
+
+Случайный граф "---общий термин для обозначения вероятностного распределения графов \cite{wico}. Случайные графы можно описать просто распределением вероятности или случайным процессом, создающим эти графы. 
+
+Наука о графах "---одна из весьма красивой и богатой приложениями науке "---науке о случайных графах. Эта наука находится на стыке комбинаторики, теории графов и теории вероятностей. В основе ее лежит глубокая идея о том, что мощные инструменты современной теории вероятностей должны поспособствовать более верному осознанию природы графа, призваны помочь решению многих комбинаторных и теоретико-графовых задач \cite{habr}.
+
+С математической точки зрения случайные графы необходимы для ответа на вопрос о свойствах типичных графов.
+
+Модель Барабаши"--~Альберт является одной из наиболее популярных и хорошо изученных моделей случайных графов.
+
+Целью настоящей работы является изучение процесса построения случайного графа на примере модели Барабаши"--~Альберт. Для достижения этой цели необходимо решить следующие задачи.
+\begin{itemize}
+\item рассмотреть алгоритм Барабаши"--~Альберт для построения случайного графа;
+\item реализовать алгоритм Барабаши"--~Альберт на некотором языке программирования;
+\item провести анализ закона распределения степеней вершин графа, построенного по алгоритму Барабаши"--~Альберт.
+\end{itemize}
+
+
+
+
+
+
+\section{Модели построения случайного графа}
+Существуют различные модели построения случайных графов.
+\subsection{Модель Эрдеша"--~Ренье}
+Рассмотрим одну из моделей случайного графа "---модель Эрдёша"--~Ренье. Модель Ердеша"--~Ренье является одной из первых моделей случайного графа. Граф построенный по этой модели представляет собой совокупность множества вершин $ V=\{1,...,n\} $и множества рёбер $ E $, состоящего из рёбер полного графа $ K_{n} $ построенного на множестве $ V $, выбранных по схеме Бернулли. Таким образом образуется случайный граф $ G=(V, E) $. Формально выражаясь, мы имеем вероятностное пространство
+\[
+G(n, p)=(\Omega_n, F_n, P_{n, p}),
+\] 
+в котором:$n$ "---количество вершин, $p$ "---вероятность появления новго ребра, $F_n$ "---сигма-множество,$ |\Omega_n\ |=2^N$ "---множество возможных рёбер,  $P_{n,p}\ (G)=p^{|E|} q^{\binom{n}{2}}-|E|\ $ "---вероятностная мера.
+Таким образом, в модели Эрдеша"--~Реньи каждое ребро независимо от других ребер входит в случайный граф с вероятностью $p$. Модель Эрдеша-Реньи на данный момент является самой изученной моделью случайных графов. \cite{rey2}
+\subsection{Модель Барабаши"--~Альберт}
+Модель Барабаши"--~Альберт является одной из первых моделей веб"=гра\-фов. Веб-граф представляет собой ориентированный мульти-граф, вершинами в котором являются какие-либо конкретные структурные единицы в Интернете: речь может идти о страницах, сайтах, хостах, владельцах и пр. Для определенности будем считать, что вершинами веб-графа служат именно сайты. А рёбрами соединяются вершины, между которыми имеются ссылки.
+
+Также Барабаши и Альберт была предложена модель предпочтительного присоединения, основная идея которой заключается в том, что при присоединении к графу новой вершины проводится некоторое количество рёбер от добавленной вершины к уже существующим, при этом вероятность появления ребра межу новой вершиной и какой-то конкретной вершиной пропорциональна степени данной вершины. Однако в своих работах Барабаши и Альберт никак не конкретизировали, какую именно из этих моделей они предлагают рассматривать. Одной из наиболее удачных и часто используемых моделей предпочтительного присоединения является модель Боллобаша"--~Риодана.
+\subsection{Модель Боллобаша"--~Риодана}
+Существуют две основных и, по сути, совпадающих модификации этой модели. В одной дается динамическое, а в другой статическое описание случайности. \cite{rey1}
+\subsubsection{Динамическая модификация}
+В данной модификации при добавлении n-ной вершины проводятся $ n $ новых рёбер, при этом рёбра могут быть кратными, а также петлями и даже кратными рёбрами, при создании графа с единственной вершиной проводится петля в этой точке.\cite{rey2} Таким образом вероятность появления ребра $ (n,\ i),\ \ i\in[0,\ n-1] $ равна $ \frac{deg\ i}{2n-1} $, где $ deg i $ "---количество уже проведенных рёбер из вершины $n$ в вершину $i$. Очевидно, что распределение вероятностей задано корректно, поскольку 
+\[
+ \sum_{i=1}^{n-1}\frac{deg\ i}{2n-1}+\frac{1}{2n-1}=\frac{2n-2}{2n-1}+\frac{1}{2n-1}=1. 
+\]
+\subsubsection{Статическая модификация, или LCD-модель}
+Данная модель основывается на объекте называемом линейной хордовой диаграммой (LCD). Для построения данного объекта требуется зафиксировать на оси абсцисс $ 2n $ точек $ {1,…,2n} $, разбить их на пары и соединить элементы каждой пары дугой, лежащей в верхней полуплоскости. Количество различных диаграмм равно
+\[
+l_n=\frac{(2n)!}{2^nn!}. 
+\]
+По каждой диаграмме строится граф с $ n $ вершинами и $ n $ ребрами по следующему алгоритму: 
+\begin{itemize}
+\item Идти слева направо по оси абсцисс пока не встретится правый конец какой-либо дуги, пусть позиция этой точки равна $ i_k $
+\item Последовательность $ {i_{k-1}+1,i_k} $ объявляется списком смежности для $k$-той вершины, $ i_0=0 $
+\item Если $ k<n $, $ k $ увеличивается на 1, переход на шаг (1).
+\end{itemize}
+	
+При построении модели LCD случайно выбирается одна из возможных LCD и вероятность каждой диаграммы равной $ \frac{1}{l_n} $, где $ l_n $ – общее число диаграмм. Графы построенные по такой модели имеют те же свойства, что и графы построенные по динамической модификации схемы Боллобаша"--~Риодана.
+Модель Чунг-Лу
+Пусть нам задано некоторое конечное множество вершин $ V ={v_1 ,… , v_n}  $ и степень каждой вершины $ d_i, i=\overline{1,n} $. Генерация графа $ G = (V, E) $ происходит следующим образом:
+\begin{itemize}
+\item Формируем множество $ L $ , состоящее из $ i*d $ копий $ i*v $ для каждого $ i $ от $ 1 $ до $ n $.
+\item Задаем случайные паросочетания на множестве $ L $.
+\item Для вершин $ u $ и $ v $ из $ Vs $ количество ребер в графе $ G $ , соединяющее их, равно числу паросочетаний между копиями $ u $ и $ v $ в $ L $.  \cite{article}
+\end{itemize}
+Сгенерированный таким образом граф соответствует степенной модели $ P(a,b) $, описывающей графы, для которых:
+\[
+|\{v|\deg v=\ x\}|=\frac{e^\alpha}{e^\beta}. 
+\]
+\section{Реализация модели Барабаши"--~Альберт}
+В ходе выполнения курсовой работы была реализована модель Барабаши"--~Альберт. Все расчёты производились на компьютере с процессором intel core i5-8265U и 16 ГБ оперативной памяти. Модель реализована на Python 3.9.1 с помощью библиотек networkx\cite{nx}, random и numpy.random.
+
+Реализованная модель представляет собой модель растущего случайного графа предпочтительного связывания. Были реализованы две модификации: в одной из них на каждом шагу добавляется фиксированное количество "--- $m$ рёбер, а во второй количество новых рёбер на каждой итерации определяется распределением Пуассона с параметром $m$. В эксперементах в качестве параметра $m$ подставляются числа из ${1, 2, 5, 7, 10}$, каждый граф строится на 10000 вершин. Так как получаемые графыслучайны, то в ходе экперемента каждый граф сроится десять раз, и строятся графики зависимости количества вершин от степени по средним значениям. 
+\subsection{Реализация стандартной модели Барабаши"--~Альберт}
+Сначала создаётся полный граф из $ m$ вершин с помощью команды \linebreak \mintinline{py}{nx.complete_graph(m)}. Затем в графе создаются $n-m$ вершин, но рёбра ещё не проводятся. Далее создаются и инициализируются вспомогательные массивы \mintinline{py}{nodes}, \mintinline{py}{used} и \mintinline{py}{degrees}, хранящие список присоединённых к графу вершин, информацию о том использованы они или нет и степени вершин, соответственно. 
+Затем  в цикле добавляются ребра, как представлено в следующем коде.
+\begin{minted}{python}
+for i in range(m, n):
+        if not o :
+            conections = []
+            j = 0
+            while j < m:
+                choice = random.choices(nodes, weights = degrees, k = 1)
+                choosen = choice[0]
+                if not used[choosen]:
+                    G.add_edge(i, choosen)
+                    j += 1
+                    conections.append(choosen)
+                    used[choosen] = True
+\end{minted}
+Здесь описан цикл по неприсоединённым вершинам (см. стр.~1). Для каждой вершины, с помощью функции \mintinline{py}{random.choices()}, выбираются $ m $ различных вершин с которыми будет соединена новая вершина (см. стр.~6). Для того чтобы не было кратных ребер создаётся массив \mintinline{py}{connections}, хранящий все выбранные вершины (см. стр.~3, 11).
+
+
+Следующим шагом с помощью массива \mintinline{py}{connections} исправляются массивы \mintinline{py}{used} и \mintinline{py}{degrees}. И новая вершина добавляется в массив \mintinline{py}{nodes}.
+\begin{minted}{python}
+	for j in range(m):
+                used[conections[j]] = False
+                degrees[conections[j] - 1] += 1
+\end{minted}
+Случай добавления первого рассматривается отдельно: если флаг \mintinline{py}{o} поднят, добавляется грань между нулевым и первым узлами. 
+\begin{minted}{python}
+  else:
+            G.add_edge(0, 1)
+            o = False
+        nodeCount += 1
+        nodes.append(nodeCount)
+        degrees.append(m)
+    return G
+\end{minted}
+Далее по такому же алгоритму присоединяются другие вершины. Такм образом получается алгоритм построения модели сучайного графа:
+\begin{minted}{python}
+  def my_bag(n, m):
+      G = nx.complete_graph(m)
+      for i in range(m, n):
+          G.add_node(i)
+      nodeCount = m
+      o = True
+      nodes = []
+      degrees = []
+      used = []
+      for j in range(n):
+          used.append(False)
+      for i in range(m):
+          nodes.append(i)
+          degrees.append(m)
+      for i in range(m, n):
+          if not o :
+              conections = []
+              j = 0
+              while j < m:
+                  choice = random.choices(nodes, weights = degrees, k = 1)
+                  choosen = choice[0]
+                  if not used[choosen]:
+                      G.add_edge(i, choosen)
+                      j += 1
+                      conections.append(choosen)
+                      used[choosen] = True
+              for j in range(m):
+                  used[conections[j]] = False
+                  degrees[conections[j] - 1] += 1
+          else:
+              G.add_edge(0, 1)
+              o = False
+          nodeCount += 1
+          nodes.append(nodeCount)
+          degrees.append(m)
+      return G
+\end{minted}
+\subsection{Реализация модели Барабаши"--~Альберт со случайным числом добавляемых ребер на каждой итерации}
+Основное отличие второй модификации заключается в том, что на каждом шаге значение m выбирается заново по распределению Пуассона, с помощью функции \mintinline{py}{numpy.random.poisson()}. Остальные манипуляции производятся аналогично:
+\begin{minted}{python}
+  def my_bag_poisson(n, m):
+      m0 = numpy.random.poisson(m)
+      G = nx.complete_graph(m0)
+      for i in range(m0, n):
+          G.add_node(i)
+      nodeCount = m0
+      o = True
+      nodes = []
+      degrees = []
+      used = []
+      for j in range(n):
+          used.append(False)
+      for i in range(m0):
+          nodes.append(i)
+          degrees.append(m0)
+      mi = numpy.random.poisson(m0, n)
+      for i in range(m0, n):
+          if not o :
+              conections = []
+              j = 0
+              while j < min(mi[i], nodeCount):
+                  choice = random.choices(nodes, weights = degrees, k = 1)
+                  choosen = choice[0]
+                  if not used[choosen]:
+                      G.add_edge(i, choosen)
+                      j += 1
+                      conections.append(choosen)
+                      used[choosen] = True
+              for j in range(min(mi[i], nodeCount)):
+                  used[conections[j]] = False
+                  degrees[conections[j] - 1] += 1
+          else:
+              G.add_edge(0, 1)
+              o = False
+          nodeCount += 1
+          nodes.append(nodeCount)
+          degrees.append(m)
+      return G
+\end{minted}
+\subsection{Вывод и представление данных для анализа}
+Также данная реализация содержит фрагмент кода, отвечающий за отображение данных о построенном графе для дальнейшего анализа. Для этого используются библиотеки matplotlib, matplotlib.pyplot\cite{ptl} и pylab. На первом шаге создаются десять графов для анализа, с помощью одной из двух описанных подпрограмм, а также создаются массивы \mintinline{py}{c} и \mintinline{py}{x} по которым будет строиться график зависимости коллчества вершин от степени.
+\begin{minted}{python}
+	 x = []
+    c = []
+    for i in range(n):
+        c.append(0)
+        x.append(i)
+\end{minted}
+Данные о количестве вершин каждой степени записываются в массив \mintinline{py}{c}. Затем каждый элемент этого массива делится на 10, для того чтобы найти среднее значение по десяти графам.
+\begin{minted}{python}
+	for i in range(10):
+        print(str(i) + ',', end = ' ')
+        bag = my_bag(n = p, m = m[j])
+        for k in bag.adjacency():
+            c[len(k[1])]+=1
+    for i in range(n):
+        c[i]/=10
+\end{minted}
+Затем, при помощи команды \mintinline{py}{pylab.loglog()} строится граф по полученным данным, массивы \mintinline{py}{c} и \mintinline{py}{x} сохраняются в текстовый файл.
+\begin{minted}{python}
+	fname = "E:\\CSW\\results\\data_s_" + str(m[j]) + ".txt"
+    f = open(fname, "w")
+    f.write("x\ty\n")
+    for i in range(n):
+        f.write(str(i) + '\t' + str(c[i]) + '\n')
+    pylab.loglog (x, c, color='red', marker='.', linestyle='-', linewidth=0.05, markersize=0.5)
+    plt.savefig('E:\\CSW\\results\\plot_s_' + str(m[j]) + '.png')
+    plt.clf()
+    print('\n');
+\end{minted}
+В результате получается фрагмент отвечающий за вывод данных:
+\begin{minted}{python}
+	n = 10000;
+	p = n
+	m = [1, 2, 5, 7, 10]
+	print('static:')
+	for j in range(5):
+	    print(str(m[j])+ '):', end = '\t')
+	    x = []
+	    c = []
+	    for i in range(n):
+	        c.append(0)
+	        x.append(i)
+	    for i in range(10):
+	        print(str(i) + ',', end = ' ')
+	        bag = my_bag(n = p, m = m[j])
+	        for k in bag.adjacency():
+	            c[len(k[1])]+=1
+	    for i in range(n):
+	        c[i]/=10
+	    fname = "E:\\CSW\\results\\data_s_" + str(m[j]) + ".txt"
+	    f = open(fname, "w")
+	    f.write("x\ty\n")
+	    for i in range(n):
+	        f.write(str(i) + '\t' + str(c[i]) + '\n')
+	    pylab.loglog (x, c, color='red', marker='.', linestyle='-', linewidth=0.05, markersize=0.5)
+	    plt.savefig('E:\\CSW\\results\\plot_s_' + str(m[j]) + '.png')
+	    plt.clf()
+	    print('\n');
+	
+	print('poisson:')
+	for j in range(5):
+	    print(str(m[j])+ '):', end = '\t')
+	    x = []
+	    c = []
+	    for i in range(n):
+	        c.append(0)
+	        x.append(i)
+	    for i in range(10):
+	        print(str(i) + ',', end = ' ')
+	        bag = my_bag_poisson(n = p, m = m[j])
+	        for k in bag.adjacency():
+	            c[len(k[1])]+=1
+	    for i in range(n):
+	        c[i]/=10
+	    fname = "E:\\CSW\\results\\data_p_" + str(m[j]) + ".txt"
+	    f = open(fname, "w")
+	    f.write("x\ty\n")
+	    for i in range(n):
+	        f.write(str(i) + '\t' + str(c[i]) + '\n')
+	    pylab.loglog (x, c, color='red', marker='.', linestyle='-', linewidth=0.05, markersize=0.5)
+	    plt.savefig('E:\\CSW\\results\\plot_p_' + str(m[j]) + '.png')
+	    plt.clf()
+	    print('\n');
+\end{minted}
+Полный код программы приведен в приложении~\ref{app:program}.
+\section{Анализ}
+Так как модель Барабаши"--~Альберт моделирует реальные системы, в том числе сеть Интернет то распределение степеней вершин в этой модели должно соответствовать распределению степеней в реальных сетях. График распределения степеней при взаимодействии белков соответствует графику функции $y=x^{-\gamma}$. В логорифмической системе координат эта функция вылядит как убывающая линейная функция с коэфициентом $-\gamma$, так как $log(y)=-\gamma log(x)$. В большинстве случаев коэфициент $\gamma = 3$. На графиках для стандартной модели Барабаши"--~Альберт (рис. 1--3, 9--14) хорошо заметна та же закономерность.
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		axis x line=center,
+	  	axis y line=center,
+		xlabel=Degree,
+		ylabel=Count,
+		xmin=0,xmax=6,
+		ymin=-1,ymax=10,
+		every axis plot/.append style={ultra thick}
+		]
+	\addplot[color=red,mark=*,only marks]
+	table[x=lnx,y=lny] {E:\\CSW\\results\\data_s_2_1.txt}{};
+	\addplot[color=blue, minor y tick num = 1000]{-2.9*x+11.5};
+	\addlegend{$-2.9x+11.5$}
+	\end{axis}
+\end{tikzpicture}
+\caption{Стандартная модель\\ Барабаши"--~Альберт, $m=2$}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		axis x line=center,
+	  	axis y line=center,
+		xlabel=Degree,
+		ylabel=Count,
+		xmin=0,xmax=6,
+		ymin=-1,ymax=10,
+		every axis plot/.append style={ultra thick}
+		]
+	\addplot[color=red,mark=*,only marks]
+	table[x=lnx,y=lny] {E:\\CSW\\results\\data_s_5_1.txt}{};
+	\addplot[color=blue, minor y tick num = 1000]{-2.9*x+13};
+	\end{axis}
+\end{tikzpicture}
+\caption{Стандартная модель Барабаши"--~Альберт, $m=5$}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		axis x line=center,
+	  	axis y line=center,
+		xlabel=Degree,
+		ylabel=Count,
+		xmin=0,xmax=6,
+		ymin=-1,ymax=10,
+		every axis plot/.append style={ultra thick}
+		]
+	\addplot[color=red,mark=*,only marks]
+	table[x=lnx,y=lny] {E:\\CSW\\results\\data_s_10_1.txt}{};
+	\addplot[color=blue, minor y tick num = 1000]{-2.9*x+14.65};
+	\end{axis}
+\end{tikzpicture}
+\caption{Стандартная модель Барабаши"--~Альберт, $m=10$}
+\end{figure}
+
+Однако многие другие структуры в реальном мире не соотвесвуют показательному распределению: начальный участок графика распределения степеней узлов в сети Интернет представляет собой степенную функцию, которая затем переходит в показательную функцию с $\gamma = 3$. Такое распределение называется смешанным, оно представляет собой сочетание степенного и показательного законов.\cite{NSB} На графиках модифицированной модели Барабаши"--~Альберт(рис. 5-9 в приложении~\ref{app:graphs}) можно обнаружить описанное распределение:
+
+\begin{figure}[!ht]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			axis x line=center,
+		  	axis y line=center,
+			xlabel=Degree,
+			ylabel=Count,
+			xmin=0,xmax=6,
+			ymin=-1,ymax=10,
+			every axis plot/.append style={ultra thick}
+			]
+		\addplot[color=red,mark=*,only marks]
+		table[x=lnx,y=lny] {E:\\CSW\\results\\data_p_1_1.txt}{};
+		\addplot[color=blue, minor y tick num = 1000]{-2.9*x+11.5};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Модифицированная модель Барабаши"--~Альберт, $m=1$}
+	\end{figure}
+	
+	\begin{figure}[!ht]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			axis x line=center,
+		  	axis y line=center,
+			xlabel=Degree,
+			ylabel=Count,
+			xmin=0,xmax=6,
+			ymin=-1,ymax=10,
+			every axis plot/.append style={ultra thick}
+			]
+		\addplot[color=red,mark=*,only marks]
+		table[x=lnx,y=lny] {E:\\CSW\\results\\data_p_2_1.txt}{};
+		\addplot[color=blue, minor y tick num = 1000]{-2.9*x+11.5};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Модифицированная модель Барабаши"--~Альберт, $m=2$}
+	\end{figure}
+	
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		axis x line=center,
+	  	axis y line=center,
+		xlabel=Degree,
+		ylabel=Count,
+		xmin=0,xmax=6,
+		ymin=-1,ymax=10,
+		every axis plot/.append style={ultra thick}
+		]
+	\addplot[color=red,mark=*,only marks]
+	table[x=lnx,y=lny] {E:\\CSW\\results\\data_p_7_1.txt}{};
+	\addplot[color=blue, minor y tick num = 1000]{-2.9*x+13.7};
+	\end{axis}
+\end{tikzpicture}
+\caption{Модифицированная модель Барабаши"--~Альберт, $m=7$}
+\end{figure}
+
+Все построенные графики приведены в приложении~\ref{app:graphs}
+
+% Раздел "Заключение"
+\conclusion
+В ходе выполнения курсовой работы были изучены различные модели случайных графов, и исследована модель Барабаши"--~Альберт. Также были изучены различные модули языка программирования Python такие как:networkx, random и numpy.random, а также matplotlib, matplotlib.pyplot и pylab.
+
+
+% Список литературы
+\bibliographystyle{gost780uv}
+\bibliography{thesis}
+
+% Окончание основного документа и начало приложений
+% Каждая последующая секция документа будет являться приложением
+
+\appendix
+\section{Графики распределения степеней}\label{app:graphs}
+В данном приложении приведены все построенные графы.
+	\begin{figure}[!ht]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			axis x line=center,
+		  	axis y line=center,
+			xlabel=Degree,
+			ylabel=Count,
+			xmin=0,xmax=6,
+			ymin=-1,ymax=10,
+			every axis plot/.append style={ultra thick}
+			]
+		\addplot[color=red,mark=*,only marks]
+		table[x=lnx,y=lny] {E:\\CSW\\results\\data_p_1_1.txt}{};
+		\addplot[color=blue, minor y tick num = 1000]{-2.9*x+11.5};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Модифицированная модель Барабаши"--~Альберт, $m=1$}
+	\end{figure}
+	
+	\begin{figure}[!ht]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			axis x line=center,
+		  	axis y line=center,
+			xlabel=Degree,
+			ylabel=Count,
+			xmin=0,xmax=6,
+			ymin=-1,ymax=10,
+			every axis plot/.append style={ultra thick}
+			]
+		\addplot[color=red,mark=*,only marks]
+		table[x=lnx,y=lny] {E:\\CSW\\results\\data_p_2_1.txt}{};
+		\addplot[color=blue, minor y tick num = 1000]{-2.9*x+11.5};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Модифицированная модель Барабаши"--~Альберт, $m=2$}
+	\end{figure}
+	
+	\begin{figure}[!ht]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			axis x line=center,
+		  	axis y line=center,
+			xlabel=Degree,
+			ylabel=Count,
+			xmin=0,xmax=6,
+			ymin=-1,ymax=10,
+			every axis plot/.append style={ultra thick}
+			]
+		\addplot[color=red,mark=*,only marks]
+		table[x=lnx,y=lny] {E:\\CSW\\results\\data_p_5_1.txt}{};
+		\addplot[color=blue, minor y tick num = 1000]{-2.9*x+13};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Модифицированная модель Барабаши"--~Альберт, $m=5$}
+	\end{figure}
+	
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		axis x line=center,
+	  	axis y line=center,
+		xlabel=Degree,
+		ylabel=Count,
+		xmin=0,xmax=6,
+		ymin=-1,ymax=10,
+		every axis plot/.append style={ultra thick}
+		]
+	\addplot[color=red,mark=*,only marks]
+	table[x=lnx,y=lny] {E:\\CSW\\results\\data_p_7_1.txt}{};
+	\addplot[color=blue, minor y tick num = 1000]{-2.9*x+13.7};
+	\end{axis}
+\end{tikzpicture}
+\caption{Модифицированная модель Барабаши"--~Альберт, $m=7$}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		axis x line=center,
+	  	axis y line=center,
+		xlabel=Degree,
+		ylabel=Count,
+		xmin=0,xmax=6,
+		ymin=-1,ymax=10,
+		every axis plot/.append style={ultra thick}
+		]
+	\addplot[color=red,mark=*,only marks]
+	table[x=lnx,y=lny] {E:\\CSW\\results\\data_p_10_1.txt}{};
+	\addplot[color=blue, minor y tick num = 1000]{-2.9*x+13.8};
+	\end{axis}
+\end{tikzpicture}
+\caption{Модифицированная модель Барабаши"--~Альберт, $m=10$}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		axis x line=center,
+	  	axis y line=center,
+		xlabel=Degree,
+		ylabel=Count,
+		xmin=0,xmax=6,
+		ymin=-1,ymax=10,
+		every axis plot/.append style={ultra thick}
+		]
+	\addplot[color=red,mark=*,only marks]
+	table[x=lnx,y=lny] {E:\\CSW\\results\\data_s_1_1.txt}{};
+	\addplot[color=blue, minor y tick num = 1000]{-2.9*x+10.5};
+	\end{axis}
+\end{tikzpicture}
+\caption{Стандартная модель Барабаши"--~Альберт, $m=1$}
+\end{figure}
+
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		axis x line=center,
+	  	axis y line=center,
+		xlabel=Degree,
+		ylabel=Count,
+		xmin=0,xmax=6,
+		ymin=-1,ymax=10,
+		every axis plot/.append style={ultra thick}
+		]
+	\addplot[color=red,mark=*,only marks]
+	table[x=lnx,y=lny] {E:\\CSW\\results\\data_s_2_1.txt}{};
+	\addplot[color=blue, minor y tick num = 1000]{-2.9*x+11.5};
+	\end{axis}
+\end{tikzpicture}
+\caption{Стандартная модель Барабаши"--~Альберт, $m=2$}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		axis x line=center,
+	  	axis y line=center,
+		xlabel=Degree,
+		ylabel=Count,
+		xmin=0,xmax=6,
+		ymin=-1,ymax=10,
+		every axis plot/.append style={ultra thick}
+		]
+	\addplot[color=red,mark=*,only marks]
+	table[x=lnx,y=lny] {E:\\CSW\\results\\data_s_5_1.txt}{};
+	\addplot[color=blue, minor y tick num = 1000]{-2.9*x+13};
+	\end{axis}
+\end{tikzpicture}
+\caption{Стандартная модель Барабаши"--~Альберт, $m=5$}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		axis x line=center,
+	  	axis y line=center,
+		xlabel=Degree,
+		ylabel=Count,
+		xmin=0,xmax=6,
+		ymin=-1,ymax=10,
+		every axis plot/.append style={ultra thick}
+		]
+	\addplot[color=red,mark=*,only marks]
+	table[x=lnx,y=lny] {E:\\CSW\\results\\data_s_7_1.txt}{};
+	\addplot[color=blue, minor y tick num = 1000]{-2.9*x+13.3};
+	\end{axis}
+\end{tikzpicture}
+\caption{Стандартная модель Барабаши"--~Альберт, $m=7$}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		axis x line=center,
+	  	axis y line=center,
+		xlabel=Degree,
+		ylabel=Count,
+		xmin=0,xmax=6,
+		ymin=-1,ymax=10,
+		every axis plot/.append style={ultra thick}
+		]
+	\addplot[color=red,mark=*,only marks]
+	table[x=lnx,y=lny] {E:\\CSW\\results\\data_s_10_1.txt}{};
+	\addplot[color=blue, minor y tick num = 1000]{-2.9*x+14.65};
+	\end{axis}
+\end{tikzpicture}
+\caption{Стандартная модель Барабаши"--~Альберт, $m=10$}
+\end{figure}
+
+\section{Текст программы}\label{app:program}
+В этом приложении приведён полный текст реализации модели Барабаши"--~Альберт.
+\begin{minted}{python}
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import networkx as nx
+import math
+import numpy.random
+import random
+import pylab
+
+def my_bag_poisson(n, m):
+    m0 = numpy.random.poisson(m)
+    G = nx.complete_graph(m0)
+    for i in range(m0, n):
+        G.add_node(i)
+    nodeCount = m0
+    o = True
+    nodes = []
+    degrees = []
+    used = []
+    for j in range(n):
+        used.append(False)
+    for i in range(m0):
+        nodes.append(i)
+        degrees.append(m0)
+    mi = numpy.random.poisson(m0, n)
+    for i in range(m0, n):
+        if not o :
+            conections = []
+            j = 0
+            while j < min(mi[i], nodeCount):
+                choice = random.choices(nodes, weights = degrees, k = 1)
+                choosen = choice[0]
+                if not used[choosen]:
+                    G.add_edge(i, choosen)
+                    j += 1
+                    conections.append(choosen)
+                    used[choosen] = True
+            for j in range(min(mi[i], nodeCount)):
+                used[conections[j]] = False
+                degrees[conections[j] - 1] += 1
+        else:
+            G.add_edge(0, 1)
+            o = False
+        nodeCount += 1
+        nodes.append(nodeCount)
+        degrees.append(m)
+    return G
+
+
+def my_bag(n, m):
+    G = nx.complete_graph(m)
+    for i in range(m, n):
+        G.add_node(i)
+    nodeCount = m
+    o = True
+    nodes = []
+    degrees = []
+    used = []
+    for j in range(n):
+        used.append(False)
+    for i in range(m):
+        nodes.append(i)
+        degrees.append(m)
+    for i in range(m, n):
+        if not o :
+            conections = []
+            j = 0
+            while j < m:
+                choice = random.choices(nodes, weights = degrees, k = 1)
+                choosen = choice[0]
+                if not used[choosen]:
+                    G.add_edge(i, choosen)
+                    j += 1
+                    conections.append(choosen)
+                    used[choosen] = True
+            for j in range(m):
+                used[conections[j]] = False
+                degrees[conections[j] - 1] += 1
+        else:
+            G.add_edge(0, 1)
+            o = False
+        nodeCount += 1
+        nodes.append(nodeCount)
+        degrees.append(m)
+    return G
+
+
+n = 10000;
+p = n
+m = [1, 2, 5, 7, 10]
+print('static:')
+for j in range(5):
+    print(str(m[j])+ '):', end = '\t')
+    x = []
+    c = []
+    for i in range(n):
+        c.append(0)
+        x.append(i)
+    for i in range(10):
+        print(str(i) + ',', end = ' ')
+        bag = my_bag(n = p, m = m[j])
+        for k in bag.adjacency():
+            c[len(k[1])]+=1
+    for i in range(n):
+        c[i]/=10
+    fname = "E:\\CSW\\results\\data_s_" + str(m[j]) + ".txt"
+    f = open(fname, "w")
+    f.write("x\ty\n")
+    for i in range(n):
+        f.write(str(i) + '\t' + str(c[i]) + '\n')
+    pylab.loglog (x, c, color='red', marker='.', linestyle='-', linewidth=0.05, markersize=0.5)
+    plt.savefig('E:\\CSW\\results\\plot_s_' + str(m[j]) + '.png')
+    plt.clf()
+    print('\n');
+
+print('poisson:')
+for j in range(5):
+    print(str(m[j])+ '):', end = '\t')
+    x = []
+    c = []
+    for i in range(n):
+        c.append(0)
+        x.append(i)
+    for i in range(10):
+        print(str(i) + ',', end = ' ')
+        bag = my_bag_poisson(n = p, m = m[j])
+        for k in bag.adjacency():
+            c[len(k[1])]+=1
+    for i in range(n):
+        c[i]/=10
+    fname = "E:\\CSW\\results\\data_p_" + str(m[j]) + ".txt"
+    f = open(fname, "w")
+    f.write("x\ty\n")
+    for i in range(n):
+        f.write(str(i) + '\t' + str(c[i]) + '\n')
+    pylab.loglog (x, c, color='red', marker='.', linestyle='-', linewidth=0.05, markersize=0.5)
+    plt.savefig('E:\\CSW\\results\\plot_p_' + str(m[j]) + '.png')
+    plt.clf()
+    print('\n');
+\end{minted}
+\end{document}
+                                                                                                                                                                                                                                                                                                                                                                        ults for OMX/cmex/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for T2A/cmr/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for OT2/cmr/m/n on input line 64.
+LaTeX Font Info:    Try loading font information for OT2+cmr on input line 64.
+
+(D:\Users\YURA\Downloads\PortableTEX\PortableTEX\MiKTeX\tex\latex\cyrillic\ot2c
+mr.fd
+File: ot2cmr.fd 2001/08/11 v3.2c Computer Modern Cyrillic font definitions
+)
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for T2C/cmr/m/n on input line 64.
+LaTeX Font Info:    Try loading font information for T2C+cmr on input line 64.
+
+(D:\Users\YURA\Downloads\PortableTEX\PortableTEX\MiKTeX\tex\latex\cyrillic\t2cc
+mr.fd
+File: t2ccmr.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
+)
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for T2B/cmr/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for LGR/cmr/m/n on input line 64.
+LaTeX Font Info:    Try loading font information for LGR+cmr on input line 64.
+
+(D:\Users\YURA\Downloads\PortableTEX\PortableTEX\MiKTeX\tex\latex\cbfonts-fd\lg
+rcmr.fd
+File: lgrcmr.fd 2017/07/29 v1.2 Greek European Computer Regular
+)
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 64.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 64.
+
+(D:\Users\YURA\Downloads\PortableTEX\PortableTEX\MiKTeX\tex\latex\base\ts1cmr.f
+d
+File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 64.
+LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    Try loading font information for T1+Tempora-TLF on input li
+ne 64.
+
+(D:\Users\YURA\Downloads\PortableTEX\PortableTEX\MiKTeX\tex\latex\tempora\t1tem
+pora-tlf.fd
+File: T1Tempora-TLF.fd 2016/02/02 (autoinst) Font definitions for T1/Tempora-TL
+F.
+)
+LaTeX Font Info:    Font shape `T1/Tempora-TLF/m/n' will be
+(Font)              scaled to size 14.4pt on input line 64.
+
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(71.13188pt, 483.69687pt, 42.67912pt)
+* v-part:(T,H,B)=(56.9055pt, 731.23584pt, 56.9055pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=483.69687pt
+* \textheight=731.23584pt
+* \oddsidemargin=-1.1381pt
+* \evensidemargin=-1.1381pt
+* \topmargin=-15.36449pt
+* \headheight=0.0pt
+* \headsep=0.0pt
+* \topskip=14.0pt
+* \footskip=28.45274pt
+* \marginparwidth=24.0pt
+* \marginparsep=10.0pt
+* \columnsep=10.0pt
+* \skip\footins=12.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: float package is loaded.
+Package caption Info: hyperref package is loaded.
+Package caption Info: listings package is loaded.
+Package caption Info: longtable package is loaded.
+
+(D:\Users\YURA\Downloads\PortableTEX\PortableTEX\MiKTeX\tex\latex\caption\ltcap
+tion.sty
+Package: ltcaption 2013/06/09 v1.4-94 longtable captions (AR)
+)
+Package caption Info: End \AtBeginDocument code.
+
+(D:\Users\YURA\Downloads\PortableTEX\PortableTEX\MiKTeX\tex\context\base\supp-p
+df.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count189
+\scratchdimen=\dimen282
+\scratchbox=\box57
+\nofMPsegments=\count190
+\nofMParguments=\count191
+\everyMPshowfont=\toks56
+\MPscratchCnt=\count192
+\MPscratchDim=\dimen283
+\MPnumerator=\count193
+\makeMPintoPDFobject=\count194
+\everyMPtoPDFconversion=\toks57
+)
+(D:\Users\YURA\Downloads\PortableTEX\PortableTEX\MiKTeX\tex\latex\oberdiek\epst
+opdf-base.sty
+Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+
+(D:\Users\YURA\Downloads\PortableTEX\PortableTEX\MiKTeX\tex\latex\oberdiek\grfe
+xt.sty
+Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
+)
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+38.
+Package grfext Info: Graphics extension search list:
+(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 456.
+)
+\c@mv@tabular=\count195
+\c@mv@boldtabular=\count196
+LaTeX Font Info:    Try loading font information for T2B+Tempora-TLF on input l
+ine 64.
+
+(D:\Users\YURA\Downloads\PortableTEX\PortableTEX\MiKTeX\tex\latex\tempora\t2bte
+mpora-tlf.fd
+File: t2btempora-tlf.fd 2015/09/13 Font definitions for T2B/Tempora-TLF.
+)
+LaTeX Font Info:    Font shape `T2B/Tempora-TLF/m/n' will be
+(Font)              scaled to size 14.4pt on input line 64.
+\AtBeginShipoutBox=\box58
+Package hyperref Info: Link coloring ON on input line 64.
+
+(D:\Users\YURA\Downloads\PortableTEX\PortableTEX\MiKTeX\tex\latex\hyperref\name
+ref.sty
+Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
+
+(D:\Users\YURA\Downloads\PortableTEX\PortableTEX\MiKTeX\tex\generic\oberdiek\ge
+ttitlestring.sty
+Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
+)
+\c@section@level=\count197
+)
+LaTeX Info: Redefining \ref on input line 64.
+LaTeX Info: Redefining \pageref on input line 64.
+LaTeX Info: Redefining \nameref on input line 64.
+ (CSW_2.out) (CSW_2.out)
+\@outlinefile=\write7
+\openout7 = `CSW_2.out'.
+
+
+ABD: EveryShipout initializing macros
+Package pgfplots notification 'compat/show suggested version=true': document ha
+s been generated with the most recent feature set (\pgfplotsset{compat=1.15}).
+
+\c@lstlisting=\count198
+LaTeX Font Info:    Font shape `T2B/Tempora-TLF/bx/n' in size <14.4> not availa
+ble
+(Font)              Font shape `T2B/Tempora-TLF/b/n' tried instead on input lin
+e 128.
+LaTeX Font Info:    Font shape `T2B/Tempora-TLF/b/n' will be
+(Font)              scaled to size 14.4pt on input line 128.
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 128.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 128.
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 128.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 128.
+[1
+
+{D:/Users/YURA/Downloads/PortableTEX/PortableTEX/MiKTeX/pdftex/config/pdftex.ma
+p}] (CSW_2.toc
+LaTeX Font Info:    Try loading font information for U+msa on input line 2.
+
+(D:\Users\YURA\Downloads\PortableTEX\PortableTEX\MiKTeX\tex\latex\amsfonts\umsa
+.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 2.
+
+(D:\Users\YURA\Downloads\PortableTEX\PortableTEX\MiKTeX\tex\latex\amsfonts\umsb
+.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+))
+\tf@toc=\write8
+\openout8 = `CSW_2.toc'.
+
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 148.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 148.
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 148.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 148.
+ [2
+
+]
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 148.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 148.
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 173.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 173.
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 173.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 173.
+ [3
+
+]
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 173.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 173.
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 175.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 175.
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 182.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 182.
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 186.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 186.
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 186.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 186.
+ [4
+
+]
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 186.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 186.
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 188.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 188.
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 193.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 193.
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 209.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 209.
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 209.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 209.
+ [5]
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 217.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 217.
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 217.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 217.
+ [6]
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 217.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 217.
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 221.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 221.
+\openout5 = `CSW_2.pyg'.
+
+ (_minted-CSW_2/default-pyg-prefix.pygstyle)
+(_minted-CSW_2/bw.pygstyle)
+(_minted-CSW_2/C560A776A9378775ADC266DC36C33990EA4F9B5162C0C95F690629BDAA381FEC
+.pygtex
+LaTeX Font Info:    Try loading font information for T2B+cmtt on input line 1.
+
+(D:\Users\YURA\Downloads\PortableTEX\PortableTEX\MiKTeX\tex\latex\cyrillic\t2bc
+mtt.fd
+File: t2bcmtt.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
+))
+\openout5 = `CSW_2.pyg'.
+
+
+(_minted-CSW_2/DC54C42DC7B405EB01CEF2CF39660477EA4F9B5162C0C95F690629BDAA381FEC
+.pygtex)
+\openout5 = `CSW_2.pyg'.
+
+
+(_minted-CSW_2/655364CF3E823E1A24B60F947843AB69EA4F9B5162C0C95F690629BDAA381FEC
+.pygtex)
+\openout5 = `CSW_2.pyg'.
+
+
+(_minted-CSW_2/DFE3F72DF48E7D54AA711EA957B83E7CEA4F9B5162C0C95F690629BDAA381FEC
+.pygtex)
+\openout5 = `CSW_2.pyg'.
+
+
+(_minted-CSW_2/A2D5D249BACADBA7B7C1CA8FDC89010DEA4F9B5162C0C95F690629BDAA381FEC
+.pygtex)
+\openout5 = `CSW_2.pyg'.
+
+
+(_minted-CSW_2/776BF4C13F9C572AC532FBCE2D3A2BCFEA4F9B5162C0C95F690629BDAA381FEC
+.pygtex)
+\openout3 = `CSW_2.pyg'.
+
+
+Overfull \hbox (101.28113pt too wide) in paragraph at lines 222--236
+[]\T2B/Tempora-TLF/m/n/14.4 Сначала со-зда-јт-ся пол-ный граф из$\OML/cmm/m/it/
+14.4 m$ \T2B/Tempora-TLF/m/n/14.4 вер-шин с по-мо-щью ко-ман-ды [][][][][][].
+ []
+
+
+(_minted-CSW_2/C02045D6D2D3082E3789FAA4CB2FF6AC31242425A2545F880D6FA0D0046D0183
+.pygtex
+LaTeX Font Info:    Font shape `T2B/Tempora-TLF/m/n' will be
+(Font)              scaled to size 12.0pt on input line 1.
+LaTeX Font Info:    Font shape `T2B/cmtt/bx/n' in size <12> not available
+(Font)              Font shape `T2B/cmtt/m/n' tried instead on input line 2.
+LaTeX Font Info:    Font shape `T2B/Tempora-TLF/m/n' will be
+(Font)              scaled to size 6.0pt on input line 2.
+)
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on input line 236.
+Package babel Info: Redefining russian shorthand "~
+(babel)             in language  on input line 236.
+Package babel Info: Redefining russian shorthand "|
+(babel)             in language  on i

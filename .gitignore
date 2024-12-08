@@ -1,0 +1,9 @@
+.vscode
+_minted*
+*.aux
+*.blg
+*.log
+*.out
+*.synctex.*
+*.toc
+real_graphs

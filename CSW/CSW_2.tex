@@ -1,0 +1,1014 @@
+	\documentclass[bachelor, och, coursework, times]{SCWorks}
+% параметр - тип обучения - одно из значений:
+%    spec     - специальность
+%    bachelor - бакалавриат (по умолчанию)
+%    master   - магистратура
+% параметр - форма обучения - одно из значений:
+%    och   - очное (по умолчанию)
+%    zaoch - заочное
+% параметр - тип работы - одно из значений:
+%    referat    - реферат
+%    coursework - курсовая работа (по умолчанию)
+%    diploma    - дипломная работа
+%    pract      - отчет по практике
+%    nir      - отчет о научно-исследовательской работе
+%    autoref    - автореферат выпускной работы
+%    assignment - задание на выпускную квалификационную работу
+%    review     - отзыв руководителя
+%    critique   - рецензия на выпускную работу
+% параметр - включение шрифта
+%    times    - включение шрифта Times New Roman (если установлен)
+%               по умолчанию выключен
+\usepackage[T2A]{fontenc}
+\usepackage[cp1251]{inputenc}
+\usepackage{graphicx}
+\usepackage{tempora}
+
+\usepackage[sort,compress]{cite}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{fancyvrb}
+\usepackage{longtable}
+\usepackage{minted}
+\usepackage{array}
+\usepackage[english,russian]{babel}
+
+
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}% <-- moves axis labels near ticklabels (respects tick label widths)
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+
+\newcommand{\eqdef}{\stackrel {\rm def}{=}}
+\newcommand{\No}{\textnumero}
+\newtheorem{lem}{Лемма}
+\setminted{style=bw,
+	linenos=true,
+	breaklines=true,
+	numbersep=5pt,
+	tabsize=2,
+	fontsize=\small,
+	bgcolor=white}
+\setmintedinline{style=bw,
+	bgcolor=white,
+	fontsize=\normalsize
+	}	
+\pgfplotsset{every axis legend/.append style={at={(0.6,1)},anchor=south west}}
+%\pgfplotsset{every axis title/.style={at={(0.5,1)},above,yshift=6pt}}
+\begin{document}
+
+% Кафедра (в родительном падеже)
+\chair{математической кибернетики и компьютерных наук}
+
+% Тема работы
+\title{Реализация и анализ модели Барабаши"--~Альберт генерации случайного графа}
+
+% Курс
+\course{2}
+
+% Группа
+\group{211}
+
+% Факультет (в родительном падеже) (по умолчанию "факультета КНиИТ")
+%\department{факультета КНиИТ}
+
+% Специальность/направление код - наименование
+\napravlenie{02.03.02 "--- Фундаментальная информатика и информационные технологии}
+%\napravlenie{02.03.01 "--- Математическое обеспечение и администрирование информационных систем}
+%\napravlenie{09.03.01 "--- Информатика и вычислительная техника}
+%\napravlenie{09.03.04 "--- Программная инженерия}
+%\napravlenie{10.05.01 "--- Компьютерная безопасность}
+
+% Для студентки. Для работы студента следующая команда не нужна.
+%\studenttitle{Студентки}
+
+% Фамилия, имя, отчество в родительном падеже
+\author{Козырева Юрия Дмитриевича}
+
+% Заведующий кафедрой
+\chtitle{к.\,ф.-м.\,н., доцент} % степень, звание
+\chname{С.\,В.\,Миронов}
+
+%Научный руководитель (для реферата преподаватель проверяющий работу)
+\satitle{зав. каф., к.\,ф.-м.\,н., доцент} %должность, степень, звание
+\saname{С.\,В.\,Миронов}
+
+% Руководитель практики от организации (только для практики,
+% для остальных типов работ не используется)
+%\patitle{доцент, к.\,ф.-м.\,н.} 
+%\paname{С.\,В.\,Миронов}
+
+% Семестр (только для практики, для остальных
+% типов работ не используется)
+%\term{1}
+
+% Наименование практики (только для практики, для остальных
+% типов работ не используется)
+%\practtype{учебная}
+
+% Продолжительность практики (количество недель) (только для практики,
+% для остальных типов работ не используется)
+%\duration{16}
+
+% Даты начала и окончания практики (только для практики, для остальных
+% типов работ не используется)
+%\practStart{01.09.2019}
+%\practFinish{31.12.2019}
+
+% Год выполнения отчета
+\date{2020}
+
+\maketitle
+
+% Включение нумерации рисунков, формул и таблиц по разделам
+% (по умолчанию - нумерация сквозная)
+% (допускается оба вида нумерации)
+%\secNumbering
+
+
+\tableofcontents
+
+% Раздел "Обозначения и сокращения". Может отсутствовать в работе
+%\abbreviations
+
+% Раздел "Определения". Может отсутствовать в работе
+%\definitions
+
+% Раздел "Определения, обозначения и сокращения". Может отсутствовать в работе.
+% Если присутствует, то заменяет собой разделы "Обозначения и сокращения" и "Определения"
+%\defabbr
+
+% Раздел "Введение"
+\intro
+Наука о графах "---одно из приложений к весьма красивой и интересной науке "---науке о случайных графах. 
+
+В повседневной жизни для решения многих задач часто используются случайные графы. Случайные графы нашли практическое применение во всех областях, где нужно смоделировать сложные сети "--- известно большое число случайных моделей графов, отражающих разнообразные типы сложных сетей в различных областях. Случайные графы применяются при моделировании и анализе биологических и социальных систем, сетей, а также при решении многих задач класса NP.
+
+Случайные графы впервые определены венгерскими математиками Эрдёшем и Реньи в книге 1959 года <<On Random Graphs>>\cite{RG}  и независимо Гильбертом в его статье <<Random graphs>>\cite{RG1}.
+
+Случайный граф "---общий термин для обозначения вероятностного распределения графов \cite{wico}. Их можно описать просто распределением вероятности или случайным процессом, создающим эти графы. 
+
+Теория сучайных графов находится на стыке комбинаторики, теории графов и теории вероятностей. В основе ее лежит глубокая идея о том, что мощные инструменты современной теории вероятностей должны поспособствовать более верному осознанию природы графа, призваны помочь решению многих комбинаторных и теоретико-графовых задач \cite{habr}.
+
+С математической точки зрения случайные графы необходимы для ответа на вопрос о свойствах типичных графов.
+
+Модель Барабаши"--~Альберт является одной из наиболее популярных и хорошо изученных моделей случайных графов.
+
+Целью настоящей работы является изучение процесса построения случайного графа на примере модели Барабаши"--~Альберт. Для достижения этой цели необходимо решить следующие задачи.
+\begin{itemize}
+\item рассмотреть алгоритм Барабаши"--~Альберт для построения случайного графа;
+\item реализовать алгоритм Барабаши"--~Альберт на некотором языке программирования;
+\item провести анализ закона распределения степеней вершин графа, построенного по алгоритму Барабаши"--~Альберт.
+\end{itemize}
+
+
+
+
+
+
+\section{Модели построения случайного графа}
+Существуют различные модели построения случайных графов.
+\subsection{Модель Эрдеша"--~Ренье}
+Модель Ердеша"--~Ренье является одной из первых моделей случайного графа. Граф построенный по этой модели представляет собой совокупность множества вершин $ V=\{1,...,n\} $ и множества рёбер $ E $, состоящего из рёбер полного графа $ K_{n} $ построенного на множестве $ V $, выбранных по схеме Бернулли. Таким образом образуется случайный граф $ G=(V, E) $. Формально выражаясь, мы имеем вероятностное пространство
+\[
+G(n, p)=(\Omega_n, F_n, P_{n, p}),
+\] 
+в котором: $n$ "---количество вершин, $p$ "---вероятность появления новго ребра, $F_n$ "---сигма-множество,$ |\Omega_n\ |=2^N$ "---множество возможных рёбер,  $P_{n,p}\ (G)=p^{|E|} q^{\binom{n}{2}}-|E|\ $ "---вероятностная мера.
+Таким образом, в модели Эрдеша"--~Реньи каждое ребро независимо от других ребер входит в случайный граф с вероятностью $p$. Модель Эрдеша"--~Реньи на данный момент является самой изученной моделью случайных графов\cite{rey2}.
+\subsection{Модель Барабаши"--~Альберт}
+Модель Барабаши"--~Альберт является одной из первых моделей веб"=гра\-фов. Веб-граф представляет собой ориентированный мульти-граф, вершинами в котором являются какие-либо конкретные структурные единицы в Интернете: речь может идти о страницах, сайтах, хостах, владельцах и пр. Для определенности будем считать, что вершинами веб-графа служат именно сайты. А рёбрами соединяются вершины, между которыми имеются ссылки.
+
+Также Барабаши и Альберт была предложена модель предпочтительного присоединения\cite{BA}, основная идея которой заключается в том, что при присоединении к графу новой вершины проводится некоторое количество рёбер от добавленной вершины к уже существующим, при этом вероятность появления ребра межу новой вершиной и какой-то конкретной вершиной пропорциональна степени данной вершины. Однако в своих работах Барабаши и Альберт никак не конкретизировали, какую именно из этих моделей они предлагают рассматривать. 
+\subsection{Модель Боллобаша"--~Риодана}
+Одной из наиболее удачных и часто используемых моделей предпочтительного присоединения является модель Боллобаша"--~Риодана. Существуют две основных и, по сути, совпадающих модификации этой модели. В одной дается динамическое, а в другой статическое описание случайности\cite{rey1}.
+\subsubsection{Динамическая модификация}
+В данной модификации при добавлении n-ной вершины проводятся $ n $ новых рёбер, при этом рёбра могут быть кратными, а также петлями и даже кратными рёбрами, при создании графа с единственной вершиной проводится петля в этой точке\cite{rey2}. Таким образом вероятность появления ребра $ (n,\ i),\ \ i\in[0,\ n-1] $ равна $ \frac{\deg\ i}{2n-1} $, где $ deg i $ "---количество уже проведенных рёбер из вершины $n$ в вершину $i$. Очевидно, что распределение вероятностей задано корректно, поскольку 
+\[
+ \sum_{i=1}^{n-1}\frac{deg\ i}{2n-1}+\frac{1}{2n-1}=\frac{2n-2}{2n-1}+\frac{1}{2n-1}=1. 
+\]
+\subsubsection{Статическая модификация, или LCD-модель}
+Данная модель основывается на объекте называемом линейной хордовой диаграммой (LCD). Для построения данного объекта требуется зафиксировать на оси абсцисс $ 2n $ точек $ {1,…,2n} $, разбить их на пары и соединить элементы каждой пары дугой, лежащей в верхней полуплоскости. Количество различных диаграмм равно
+\[
+l_n=\frac{(2n)!}{2^nn!}. 
+\]
+По каждой диаграмме строится граф с $ n $ вершинами и $ n $ ребрами по следующему алгоритму: 
+\begin{itemize}
+\item Идти слева направо по оси абсцисс пока не встретится правый конец какой-либо дуги, пусть позиция этой точки равна $ i_k $
+\item Последовательность $ i_{k-1}+1$, $i_k $ объявляется списком смежности для $k$-той вершины, $ i_0=0 $
+\item Если $ k<n $, $ k $ увеличивается на 1, переход на шаг (1).
+\end{itemize}
+	
+При построении модели LCD случайно выбирается одна из возможных LCD и вероятность каждой диаграммы равной $ \frac{1}{l_n} $, где $ l_n $ – общее число диаграмм. Графы построенные по такой модели имеют те же свойства, что и графы построенные по динамической модификации схемы Боллобаша"--~Риодана.
+Модель Чунг-Лу
+Пусть нам задано некоторое конечное множество вершин $ V ={v_1 ,… , v_n}  $ и степень каждой вершины $ d_i$, $i=\overline{1,n} $. Генерация графа $ G = (V, E) $ происходит следующим образом:
+\begin{itemize}
+\item Формируем множество $ L $, состоящее из $ i \cdot d $ копий $ i \cdot v $ для каждого $ i $ от $ 1 $ до $ n $.
+\item Задаем случайные паросочетания на множестве $ L $.
+\item Для вершин $ u $ и $ v $ из $ Vs $ количество ребер в графе $ G $ , соединяющее их, равно числу паросочетаний между копиями $ u $ и $ v $ в $ L $\cite{article}.
+\end{itemize}
+Сгенерированный таким образом граф соответствует степенной модели $ P(a,b) $, описывающей графы, для которых:
+\[
+|\{v|\deg v=\ x\}|=\frac{e^\alpha}{e^\beta}. 
+\]
+\section{Реализация модели Барабаши"--~Альберт}
+В ходе выполнения курсовой работы была реализована модель Барабаши"--~Альберт. Все расчёты производились на компьютере с процессором Intel core i5-8265U и 16 ГБ оперативной памяти. Модель реализована на Python 3.9.1 с помощью библиотек networkx\cite{nx}, random и numpy.random.
+
+Реализованная модель представляет собой модель растущего случайного графа предпочтительного связывания. Были реализованы две модификации: в одной из них на каждом шагу добавляется фиксированное количество $m$ рёбер, а во второй, количество новых рёбер на каждой итерации определяется распределением Пуассона с параметром $m$. В эксперементах в качестве параметра $m$ подставляются числа из множества $\{1, 2, 5, 7, 10\}$, каждый вариант графа строится на 10000 вершин. Так как получаемые графы случайны, то в ходе экперемента каждый граф сроится десять раз, и строятся графики зависимости количества вершин от степени по средним значениям. 
+\subsection{Реализация стандартной модели Барабаши"--~Альберт}
+Реализация стандартной модели Барабаши "--~ Альберт состоит в следующем. Сначала создаётся полный граф из $ m$ вершин с помощью команды\linebreak\mintinline{py}{nx.complete_graph(m)}. Затем в графе создаются $n-m$ вершин, но рёбра ещё не проводятся. Далее создаются и инициализируются вспомогательные массивы \mintinline{py}{nodes}, \mintinline{py}{used} и \mintinline{py}{degrees}, хранящие список присоединённых к графу вершин, информацию о том использованы они или нет и степени вершин, соответственно. 
+Затем  в цикле добавляются ребра, как представлено в следующем коде.
+\begin{minted}{python}
+		for i in range(m, n):
+        if not o :
+            conections = []
+            j = 0
+            while j < m:
+                choice = random.choices(nodes, weights = degrees, k = 1)
+                choosen = choice[0]
+                if not used[choosen]:
+                    G.add_edge(i, choosen)
+                    j += 1
+                    conections.append(choosen)
+                    used[choosen] = True
+\end{minted}
+Здесь описан цикл по неприсоединённым вершинам (см. стр.~1). Для каждой вершины, с помощью функции \mintinline{py}{random.choices()}, выбираются $ m $ различных вершин с которыми будет соединена новая вершина (см. стр.~6). Для того чтобы не было кратных ребер создаётся массив \mintinline{py}{connections}, хранящий все выбранные вершины (см. стр.~3, 11).
+
+
+Следующим шагом с помощью массива \mintinline{py}{connections} исправляются массивы \mintinline{py}{used} и \mintinline{py}{degrees}. И новая вершина добавляется в массив\mintinline{py}{nodes}.
+\begin{minted}{python}
+for j in range(m):
+	used[conections[j]] = False
+	degrees[conections[j] - 1] += 1
+	...
+nodeCount += 1
+	nodes.append(nodeCount)
+	degrees.append(m)
+\end{minted}
+Случай добавления первой вершины рассматривается отдельно: если флаг \mintinline{py}{o} поднят, добавляется грань между нулевым и первым узлами. 
+\begin{minted}{python}
+  			else:
+            G.add_edge(0, 1)
+            o = False
+        nodeCount += 1
+        nodes.append(nodeCount)
+        degrees.append(m)
+    return G
+\end{minted}
+Далее по такому же алгоритму присоединяются другие вершины. Таким образом, получается алгоритм построения модели сучайного графа:
+\begin{minted}{python}
+		def my_bag(n, m):
+      G = nx.complete_graph(m)
+      for i in range(m, n):
+          G.add_node(i)
+      nodeCount = m
+      o = True
+      nodes = []
+      degrees = []
+      used = []
+      for j in range(n):
+          used.append(False)
+      for i in range(m):
+          nodes.append(i)
+          degrees.append(m)
+      for i in range(m, n):
+          if not o :
+              conections = []
+              j = 0
+              while j < m:
+                  choice = random.choices(nodes, weights = degrees, k = 1)
+                  choosen = choice[0]
+                  if not used[choosen]:
+                      G.add_edge(i, choosen)
+                      j += 1
+                      conections.append(choosen)
+                      used[choosen] = True
+              for j in range(m):
+                  used[conections[j]] = False
+                  degrees[conections[j] - 1] += 1
+          else:
+              G.add_edge(0, 1)
+              o = False
+          nodeCount += 1
+          nodes.append(nodeCount)
+          degrees.append(m)
+      return G
+\end{minted}
+\subsection{Реализация модели Барабаши"--~Альберт со случайным числом добавляемых ребер на каждой итерации}
+Основное отличие второй модификации от стандартной модели заключается в том, что на каждом шаге значение $m$ выбирается заново по распределению Пуассона, с помощью функции\mintinline{py}{numpy.random.poisson()}. Остальные манипуляции производятся аналогично:
+\begin{minted}{python}
+	def my_bag_poisson(n, m):
+		m0 = numpy.random.poisson(m)
+      	G = nx.complete_graph(m0)
+      	for i in range(m0, n):
+          	G.add_node(i)
+      	nodeCount = m0
+      	o = True
+      	nodes = []
+      	degrees = []
+      	used = []
+      	for j in range(n):
+        	used.append(False)
+      	for i in range(m0):
+          	nodes.append(i)
+          	degrees.append(m0)
+      	mi = numpy.random.poisson(m0, n)
+      	for i in range(m0, n):
+          	if not o :
+              	conections = []
+              	j = 0
+              	while j < min(mi[i], nodeCount):
+                  	choice = random.choices(nodes, weights = degrees, k = 1)
+                  	choosen = choice[0]
+                  	if not used[choosen]:
+                      	G.add_edge(i, choosen)
+                      	j += 1
+                      	conections.append(choosen)
+                      	used[choosen] = True
+              	for j in range(min(mi[i], nodeCount)):
+                  	used[conections[j]] = False
+                  	degrees[conections[j] - 1] += 1
+          	else:
+              	G.add_edge(0, 1)
+              	o = False
+          	nodeCount += 1
+          	nodes.append(nodeCount)
+          	degrees.append(m)
+      	return G
+\end{minted}
+\subsection{Вывод и представление данных для анализа}
+Данная реализация содержит фрагмент кода, отвечающий за отображение данных о построенном графе для дальнейшего анализа. Для этого используются библиотеки matplotlib, matplotlib.pyplot\cite{ptl} и pylab. На первом шаге создаются десять графов для анализа, с помощью одной из двух описанных подпрограмм, а также создаются массивы \mintinline{py}{c} и \mintinline{py}{x} по которым будет строиться график зависимости коллчества вершин от степени.
+\begin{minted}{python}
+		x = []
+    c = []
+    for i in range(n):
+        c.append(0)
+        x.append(i)
+\end{minted}
+Данные о количестве вершин каждой степени записываются в массив \mintinline{py}{c.} Затем каждый элемент этого массива делится на 10, для того чтобы найти среднее значение по десяти графам.
+\begin{minted}{python}
+		for i in range(10):
+        print(str(i) + ',', end = ' ')
+        bag = my_bag(n = p, m = m[j])
+        for k in bag.adjacency():
+            c[len(k[1])]+=1
+    for i in range(n):
+        c[i]/=10
+\end{minted}
+Затем, при помощи команды \mintinline{py}{pylab.loglog()} строится график по полученным данным, массивы \mintinline{py}{c} и \mintinline{py}{x} сохраняются в текстовый файл.
+\begin{minted}{python}
+		fname = "F:\\CSW\\results\\data_s_" + str(m[j]) + ".txt"
+    f = open(fname, "w")
+    f.write("x\ty\n")
+    for i in range(n):
+        f.write(str(i) + '\t' + str(c[i]) + '\n')
+    pylab.loglog (x, c, color='red', marker='.', linestyle='-', linewidth=0.05, markersize=0.5)
+    plt.savefig('F:\\CSW\\results\\plot_s_' + str(m[j]) + '.png')
+    plt.clf()
+    print('\n');
+\end{minted}
+В результате получается фрагмент отвечающий за вывод данных:
+\begin{minted}{python}
+	n = 10000;
+	p = n
+	m = [1, 2, 5, 7, 10]
+	print('static:')
+	for j in range(5):
+	    print(str(m[j])+ '):', end = '\t')
+	    x = []
+	    c = []
+	    for i in range(n):
+	        c.append(0)
+	        x.append(i)
+	    for i in range(10):
+	        print(str(i) + ',', end = ' ')
+	        bag = my_bag(n = p, m = m[j])
+	        for k in bag.adjacency():
+	            c[len(k[1])]+=1
+	    for i in range(n):
+	        c[i]/=10
+	    fname = "F:\\CSW\\results\\data_s_" + str(m[j]) + ".txt"
+	    f = open(fname, "w")
+	    f.write("x\ty\n")
+	    for i in range(n):
+	        f.write(str(i) + '\t' + str(c[i]) + '\n')
+	    pylab.loglog (x, c, color='red', marker='.', linestyle='-', linewidth=0.05, markersize=0.5)
+	    plt.savefig('F:\\CSW\\results\\plot_s_' + str(m[j]) + '.png')
+	    plt.clf()
+	    print('\n');
+	
+	print('poisson:')
+	for j in range(5):
+	    print(str(m[j])+ '):', end = '\t')
+	    x = []
+	    c = []
+	    for i in range(n):
+	        c.append(0)
+	        x.append(i)
+	    for i in range(10):
+	        print(str(i) + ',', end = ' ')
+	        bag = my_bag_poisson(n = p, m = m[j])
+	        for k in bag.adjacency():
+	            c[len(k[1])]+=1
+	    for i in range(n):
+	        c[i]/=10
+	    fname = "F:\\CSW\\results\\data_p_" + str(m[j]) + ".txt"
+	    f = open(fname, "w")
+	    f.write("x\ty\n")
+	    for i in range(n):
+	        f.write(str(i) + '\t' + str(c[i]) + '\n')
+	    pylab.loglog (x, c, color='red', marker='.', linestyle='-', linewidth=0.05, markersize=0.5)
+	    plt.savefig('F:\\CSW\\results\\plot_p_' + str(m[j]) + '.png')
+	    plt.clf()
+	    print('\n');
+\end{minted}
+В результате выполнения программы создается текстовый файл, содержащий данные о графе и график распределения степеней основанный на этих данных. Следующий код представляет пример такого вывода.
+\begin{minted}{text}
+x	y
+0	4629.4
+1	1031.2
+2	1053.4
+3	892.6
+4	703.4
+5	506.1
+6	339.7
+7	217.9
+8	143.1
+9	97.6
+10	64.0
+11	44.3
+12	36.1
+13	28.2
+14	23.8
+15	16.6
+16	14.2
+17	12.8
+18	12.9
+19	9.8
+20	8.1
+21	7.1
+22	8.1
+23	6.5
+24	3.7
+25	4.8
+26	3.4
+27	3.1
+28	3.5
+29	3.1
+\end{minted} 
+Примеры вывода графика распределения степеней приведены на Рис. 1, 2.
+\begin{figure}[!ht]
+    \centering
+	    \includegraphics[scale=0.7]{plot_s_10.png}
+    \caption{График построенный программой\\ для стандартной модели}\label{fig:g1}
+\end{figure}
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[scale=0.7]{plot_p_10.png}
+    \caption{График построенный программой\\ для модифицированной модели}\label{fig:g2}
+\end{figure}
+Полный код программы приведен в приложении~\ref{app:program}.
+\section{Анализ}
+Так как модель Барабаши"--~Альберт подходит для описания реальных систем, в том числе сеть Интернет то распределение степеней вершин в этой модели должно соответствовать распределению степеней в реальных сетях. 
+
+Например, график распределения степеней при взаимодействии белков, представленный на рис. \ref{fig:img1} (сиреневые точки) \cite{NSB}, соответствует графику функции $y=x^{-\gamma}$. В логорифмической системе координат эта функция вылядит как убывающая линейная функция с коэфициентом $-\gamma$, так как $log(y)=-\gamma log(x)$. В большинстве случаев коэфициент $\gamma = 3$. 
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[scale=0.7]{img1.png}
+    \caption{Распределение степеней при\\ взаимодействии белков}\label{fig:img1}
+\end{figure}
+
+В нашей программной реализации для наборов выходных данных были построены графики для исследования закона распределения степеней и подбора числа $ \gamma $ в случае, если распределение степеней представляет собой степенную функцию.
+
+На графиках для стандартной модели Барабаши"--~Альберт (рис. \ref{fig:stand-1}--\ref{fig:stand-3}, \ref{fig:stand-4}--\ref{fig:stand-8}) хорошо заметна та же закономерность. При этом можно заметить, что значение $\gamma$ не зависит от значения $m$.
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		axis x line=center,
+	  	axis y line=center,
+		xlabel=Degree,
+		ylabel=Count,
+		xmin=0,xmax=6,
+		ymin=-1,ymax=10,
+		every axis plot/.append style={ultra thick}
+		]
+	\addplot[color=red,mark=*,only marks]
+	table[x=lnx,y=lny] {F:\\CSW\\results\\data_s_2_1.txt}{};
+	\addlegendentry{Распределение степеней}
+	\addplot[color=blue, minor y tick num = 1000]{-2.9*x+11.5};
+	\addlegendentry{-2.9x+11.5}
+	\end{axis}
+\end{tikzpicture}
+\caption{Стандартная модель\\ Барабаши"--~Альберт, $m=2$}\label{fig:stand-1}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		axis x line=center,
+	  	axis y line=center,
+		xlabel=Degree,
+		ylabel=Count,
+		xmin=0,xmax=6,
+		ymin=-1,ymax=10,
+		every axis plot/.append style={ultra thick}
+		]
+	\addplot[color=red,mark=*,only marks]
+	table[x=lnx,y=lny] {F:\\CSW\\results\\data_s_5_1.txt}{};
+	\addlegendentry{Распределение степеней}
+	\addplot[color=blue, minor y tick num = 1000]{-2.9*x+13};
+	\addlegendentry{-2.9x+13}
+	\end{axis}
+\end{tikzpicture}
+\caption{Стандартная модель\\ Барабаши"--~Альберт, $m=5$}\label{fig:stand-2}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		axis x line=center,
+	  	axis y line=center,
+		xlabel=Degree,
+		ylabel=Count,
+		xmin=0,xmax=6,
+		ymin=-1,ymax=10,
+		every axis plot/.append style={ultra thick}
+		]
+	\addplot[color=red,mark=*,only marks]
+	table[x=lnx,y=lny] {F:\\CSW\\results\\data_s_10_1.txt}{};
+	\addlegendentry{Распределение степеней}
+	\addplot[color=blue, minor y tick num = 1000]{-2.9*x+14.65};
+	\addlegendentry{-2.9x+14.65}
+	\end{axis}
+\end{tikzpicture}
+\caption{Стандартная модель\\ Барабаши"--~Альберт, $m=10$}\label{fig:stand-3}
+\end{figure}
+
+Многие другие структуры в реальном мире не соотвесвуют степенному распределению. Например, на рис. \ref{fig:img2}\cite{NSB} видно, что начальный участок графика распределения степеней узлов в сети Интернет представляет собой показательную функцию, которая затем переходит в степенную функцию с $\gamma = 3$. Такое распределение называется смешанным, оно представляет собой сочетание степенного и показательного законов.\cite{NSB}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[scale=0.7]{img2.png}
+    \caption{Распределение степеней\\ в сети Интернет и при \\научной кооперации}\label{fig:img2}
+\end{figure}
+ 
+На графиках модифицированной модели Барабаши"--~Альберт(рис. \ref{fig:pois-1}-\ref{fig:pois-3}, \ref{fig:pois-4}-\ref{fig:pois-8} в приложении~\ref{app:graphs}) можно обнаружить описанное распределение. И $\gamma$ всё так же равно $2.9$ независимо от показателя $m$.
+\begin{figure}[!ht]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			axis x line=center,
+		  	axis y line=center,
+			xlabel=Degree,
+			ylabel=Count,
+			xmin=0,xmax=6,
+			ymin=-1,ymax=10,
+			every axis plot/.append style={ultra thick}
+			]
+		\addplot[color=red,mark=*,only marks]
+		table[x=lnx,y=lny] {F:\\CSW\\results\\data_p_1_1.txt}{};
+		\addlegendentry{Распределение степеней}
+		\addplot[color=blue, minor y tick num = 1000]{-2.9*x+11.5};
+		\addlegendentry{-2.9x+11.5}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Модифицированная модель\\ Барабаши"--~Альберт, $m=1$}\label{fig:pois-1}
+	\end{figure}
+	
+	\begin{figure}[!ht]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			axis x line=center,
+		  	axis y line=center,
+			xlabel=Degree,
+			ylabel=Count,
+			xmin=0,xmax=6,
+			ymin=-1,ymax=10,
+			every axis plot/.append style={ultra thick}
+			]
+		\addplot[color=red,mark=*,only marks]
+		table[x=lnx,y=lny] {F:\\CSW\\results\\data_p_2_1.txt}{};
+		\addlegendentry{Распределение степеней}
+		\addplot[color=blue, minor y tick num = 1000]{-2.9*x+11.5};
+		\addlegendentry{-2.9x+11.5}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Модифицированная модель\\ Барабаши"--~Альберт, $m=2$}\label{fig:pois-2}
+	\end{figure}
+	
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		axis x line=center,
+	  	axis y line=center,
+		xlabel=Degree,
+		ylabel=Count,
+		xmin=0,xmax=6,
+		ymin=-1,ymax=10,
+		every axis plot/.append style={ultra thick}
+		]
+	\addplot[color=red,mark=*,only marks]
+	table[x=lnx,y=lny] {F:\\CSW\\results\\data_p_7_1.txt}{};
+	\addlegendentry{Распределение степеней}
+	\addplot[color=blue, minor y tick num = 1000]{-2.9*x+13.7};
+	\addlegendentry{-2.9x+13.7}
+	\end{axis}
+\end{tikzpicture}
+\caption{Модифицированная модель\\ Барабаши"--~Альберт, $m=7$}\label{fig:pois-3}
+\end{figure}
+
+Все построенные графики приведены в приложении~\ref{app:graphs}
+
+% Раздел "Заключение"
+\conclusion
+В ходе выполнения курсовой работы были изучены различные модели генерации случайных графов, и проведены исследования стандартной модели Барабаши"--~Альберт и её модификации со случайным количеством новых вершин, подчиняющимся распределению Пуасона.  Проведенные эксперименты показали, что модификация алгоритма Барабаши"--~Альберт, в которой количество новых вершин подчиняется распределению Пуасона, распределение степеней полученного графа - смешанное, и что не зависимо от модификации и от выбора числа $m$ полученное число гамма от степенного распределения равно $2.9$. Также были изучены различные модули языка программирования Python такие как: networkx(для работы с графами), random и numpy.random(для работы со случайными величинами), а также matplotlib, matplotlib.pyplot и pylab(для построения и отображения графиков).
+
+
+
+% Список литературы
+\bibliographystyle{gost780uv}
+\bibliography{thesis}
+
+% Окончание основного документа и начало приложений
+% Каждая последующая секция документа будет являться приложением
+
+\appendix
+\section{Графики распределения степеней}\label{app:graphs}
+В данном приложении приведены все построенные графы.
+	\begin{figure}[!ht]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			axis x line=center,
+		  	axis y line=center,
+			xlabel=Degree,
+			ylabel=Count,
+			xmin=0,xmax=6,
+			ymin=-1,ymax=10,
+			every axis plot/.append style={ultra thick}
+			]
+		\addplot[color=red,mark=*,only marks]
+		table[x=lnx,y=lny] {F:\\CSW\\results\\data_p_1_1.txt}{};
+		\addlegendentry{Распределение степеней}
+		\addplot[color=blue, minor y tick num = 1000]{-2.9*x+11.5};
+		\addlegendentry{-2.9x+11.5}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Модифицированная модель\\ Барабаши"--~Альберт, $m=1$}\label{fig:pois-4}
+	\end{figure}
+	
+	\begin{figure}[!ht]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			axis x line=center,
+		  	axis y line=center,
+			xlabel=Degree,
+			ylabel=Count,
+			xmin=0,xmax=6,
+			ymin=-1,ymax=10,
+			every axis plot/.append style={ultra thick}
+			]
+		\addplot[color=red,mark=*,only marks]
+		table[x=lnx,y=lny] {F:\\CSW\\results\\data_p_2_1.txt}{};
+		\addlegendentry{Распределение степеней}
+		\addplot[color=blue, minor y tick num = 1000]{-2.9*x+11.5};
+		\addlegendentry{-2.9x+11.5}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Модифицированная модель\\ Барабаши"--~Альберт, $m=2$}\label{fig:pois-5}
+	\end{figure}
+	
+	\begin{figure}[!ht]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			axis x line=center,
+		  	axis y line=center,
+			xlabel=Degree,
+			ylabel=Count,
+			xmin=0,xmax=6,
+			ymin=-1,ymax=10,
+			every axis plot/.append style={ultra thick}
+			]
+		\addplot[color=red,mark=*,only marks]
+		table[x=lnx,y=lny] {F:\\CSW\\results\\data_p_5_1.txt}{};
+		\addlegendentry{Распределение степеней}
+		\addplot[color=blue, minor y tick num = 1000]{-2.9*x+13};
+		\addlegendentry{-2.9x+13}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Модифицированная модель\\ Барабаши"--~Альберт, $m=5$}\label{fig:pois-6}
+	\end{figure}
+	
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		axis x line=center,
+	  	axis y line=center,
+		xlabel=Degree,
+		ylabel=Count,
+		xmin=0,xmax=6,
+		ymin=-1,ymax=10,
+		every axis plot/.append style={ultra thick}
+		]
+	\addplot[color=red,mark=*,only marks]
+	table[x=lnx,y=lny] {F:\\CSW\\results\\data_p_7_1.txt}{};
+	\addlegendentry{Распределение степеней}
+	\addplot[color=blue, minor y tick num = 1000]{-2.9*x+13.7};
+	\addlegendentry{-2.9x+13.7}
+	\end{axis}
+\end{tikzpicture}
+\caption{Модифицированная модель\\ Барабаши"--~Альберт, $m=7$}\label{fig:pois-7}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		axis x line=center,
+	  	axis y line=center,
+		xlabel=Degree,
+		ylabel=Count,
+		xmin=0,xmax=6,
+		ymin=-1,ymax=10,
+		every axis plot/.append style={ultra thick}
+		]
+	\addplot[color=red,mark=*,only marks]
+	table[x=lnx,y=lny] {F:\\CSW\\results\\data_p_10_1.txt}{};
+	\addlegendentry{Распределение степеней}
+	\addplot[color=blue, minor y tick num = 1000]{-2.9*x+13.8};
+	\addlegendentry{-2.9x+13.8}
+	\end{axis}
+\end{tikzpicture}
+\caption{Модифицированная модель\\ Барабаши"--~Альберт, $m=10$}\label{fig:pois-8}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		axis x line=center,
+	  	axis y line=center,
+		xlabel=Degree,
+		ylabel=Count,
+		xmin=0,xmax=6,
+		ymin=-1,ymax=10,
+		every axis plot/.append style={ultra thick}
+		]
+	\addplot[color=red,mark=*,only marks]
+	table[x=lnx,y=lny] {F:\\CSW\\results\\data_s_1_1.txt}{};
+	\addlegendentry{Распределение степеней}
+	\addplot[color=blue, minor y tick num = 1000]{-2.9*x+10.5};
+	\addlegendentry{-2.9x+10.5}
+	\end{axis}
+\end{tikzpicture}
+\caption{Стандартная модель\\ Барабаши"--~Альберт, $m=1$}\label{fig:stand-4}
+\end{figure}
+
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		axis x line=center,
+	  	axis y line=center,
+		xlabel=Degree,
+		ylabel=Count,
+		xmin=0,xmax=6,
+		ymin=-1,ymax=10,
+		every axis plot/.append style={ultra thick}
+		]
+	\addplot[color=red,mark=*,only marks]
+	table[x=lnx,y=lny] {F:\\CSW\\results\\data_s_2_1.txt}{};
+	\addlegendentry{Распределение степеней}
+	\addplot[color=blue, minor y tick num = 1000]{-2.9*x+11.5};
+	\addlegendentry{-2.9x+11.5}
+	\end{axis}
+\end{tikzpicture}
+\caption{Стандартная модель\\ Барабаши"--~Альберт, $m=2$}\label{fig:stand-5}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		axis x line=center,
+	  	axis y line=center,
+		xlabel=Degree,
+		ylabel=Count,
+		xmin=0,xmax=6,
+		ymin=-1,ymax=10,
+		every axis plot/.append style={ultra thick}
+		]
+	\addplot[color=red,mark=*,only marks]
+	table[x=lnx,y=lny] {F:\\CSW\\results\\data_s_5_1.txt}{};
+	\addlegendentry{Распределение степеней}
+	\addplot[color=blue, minor y tick num = 1000]{-2.9*x+13};
+	\addlegendentry{-2.9x+13}
+	\end{axis}
+\end{tikzpicture}
+\caption{Стандартная модель\\ Барабаши"--~Альберт, $m=5$}\label{fig:stand-6}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		axis x line=center,
+	  	axis y line=center,
+		xlabel=Degree,
+		ylabel=Count,
+		xmin=0,xmax=6,
+		ymin=-1,ymax=10,
+		every axis plot/.append style={ultra thick}
+		]
+	\addplot[color=red,mark=*,only marks]
+	table[x=lnx,y=lny] {F:\\CSW\\results\\data_s_7_1.txt}{};
+	\addlegendentry{Распределение степеней}
+	\addplot[color=blue, minor y tick num = 1000]{-2.9*x+13.3};
+	\addlegendentry{-2.9x+13.3}
+	\end{axis}
+\end{tikzpicture}
+\caption{Стандартная модель\\ Барабаши"--~Альберт, $m=7$}\label{fig:stand-7}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+	\begin{axis}[
+		axis x line=center,
+	  	axis y line=center,
+		xlabel=Degree,
+		ylabel=Count,
+		xmin=0,xmax=6,
+		ymin=-1,ymax=10,
+		every axis plot/.append style={ultra thick}
+		]
+	\addplot[color=red,mark=*,only marks]
+	table[x=lnx,y=lny] {F:\\CSW\\results\\data_s_10_1.txt}{};
+	\addlegendentry{Распределение степеней}
+	\addplot[color=blue, minor y tick num = 1000]{-2.9*x+14.65};
+	\addlegendentry{-2.9x+14.65}
+	\end{axis}
+\end{tikzpicture}
+\caption{Стандартная модель\\ Барабаши"--~Альберт, $m=10$}\label{fig:stand-8}
+\end{figure}
+
+\section{Текст программы}\label{app:program}
+В этом приложении приведён полный текст реализации модели Барабаши"--~Альберт.
+\begin{minted}{python}
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import networkx as nx
+import math
+import numpy.random
+import random
+import pylab
+
+def my_bag_poisson(n, m):
+    m0 = numpy.random.poisson(m)
+    G = nx.complete_graph(m0)
+    for i in range(m0, n):
+        G.add_node(i)
+    nodeCount = m0
+    o = True
+    nodes = []
+    degrees = []
+    used = []
+    for j in range(n):
+        used.append(False)
+    for i in range(m0):
+        nodes.append(i)
+        degrees.append(m0)
+    mi = numpy.random.poisson(m0, n)
+    for i in range(m0, n):
+        if not o :
+            conections = []
+            j = 0
+            while j < min(mi[i], nodeCount):
+                choice = random.choices(nodes, weights = degrees, k = 1)
+                choosen = choice[0]
+                if not used[choosen]:
+                    G.add_edge(i, choosen)
+                    j += 1
+                    conections.append(choosen)
+                    used[choosen] = True
+            for j in range(min(mi[i], nodeCount)):
+                used[conections[j]] = False
+                degrees[conections[j] - 1] += 1
+        else:
+            G.add_edge(0, 1)
+            o = False
+        nodeCount += 1
+        nodes.append(nodeCount)
+        degrees.append(m)
+    return G
+
+
+def my_bag(n, m):
+    G = nx.complete_graph(m)
+    for i in range(m, n):
+        G.add_node(i)
+    nodeCount = m
+    o = True
+    nodes = []
+    degrees = []
+    used = []
+    for j in range(n):
+        used.append(False)
+    for i in range(m):
+        nodes.append(i)
+        degrees.append(m)
+    for i in range(m, n):
+        if not o :
+            conections = []
+            j = 0
+            while j < m:
+                choice = random.choices(nodes, weights = degrees, k = 1)
+                choosen = choice[0]
+                if not used[choosen]:
+                    G.add_edge(i, choosen)
+                    j += 1
+                    conections.append(choosen)
+                    used[choosen] = True
+            for j in range(m):
+                used[conections[j]] = False
+                degrees[conections[j] - 1] += 1
+        else:
+            G.add_edge(0, 1)
+            o = False
+        nodeCount += 1
+        nodes.append(nodeCount)
+        degrees.append(m)
+    return G
+
+
+n = 10000;
+p = n
+m = [1, 2, 5, 7, 10]
+print('static:')
+for j in range(5):
+    print(str(m[j])+ '):', end = '\t')
+    x = []
+    c = []
+    for i in range(n):
+        c.append(0)
+        x.append(i)
+    for i in range(10):
+        print(str(i) + ',', end = ' ')
+        bag = my_bag(n = p, m = m[j])
+        for k in bag.adjacency():
+            c[len(k[1])]+=1
+    for i in range(n):
+        c[i]/=10
+    fname = "F:\\CSW\\results\\data_s_" + str(m[j]) + ".txt"
+    f = open(fname, "w")
+    f.write("x\ty\n")
+    for i in range(n):
+        f.write(str(i) + '\t' + str(c[i]) + '\n')
+    pylab.loglog (x, c, color='red', marker='.', linestyle='-', linewidth=0.05, markersize=0.5)
+    plt.savefig('F:\\CSW\\results\\plot_s_' + str(m[j]) + '.png')
+    plt.clf()
+    print('\n');
+
+print('poisson:')
+for j in range(5):
+    print(str(m[j])+ '):', end = '\t')
+    x = []
+    c = []
+    for i in range(n):
+        c.append(0)
+        x.append(i)
+    for i in range(10):
+        print(str(i) + ',', end = ' ')
+        bag = my_bag_poisson(n = p, m = m[j])
+        for k in bag.adjacency():
+            c[len(k[1])]+=1
+    for i in range(n):
+        c[i]/=10
+    fname = "F:\\CSW\\results\\data_p_" + str(m[j]) + ".txt"
+    f = open(fname, "w")
+    f.write("x\ty\n")
+    for i in range(n):
+        f.write(str(i) + '\t' + str(c[i]) + '\n')
+    pylab.loglog (x, c, color='red', marker='.', linestyle='-', linewidth=0.05, markersize=0.5)
+    plt.savefig('F:\\CSW\\results\\plot_p_' + str(m[j]) + '.png')
+    plt.clf()
+    print('\n');
+\end{minted}
+\end{document}
