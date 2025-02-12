@@ -4,7 +4,7 @@ import math
 import networkx as nx
 import numpy as np
 
-n = 1000
+n = 100000
 graphCount = 30
 
 def measure_kvise (degrees, neibours, f):

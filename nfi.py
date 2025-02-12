@@ -1,7 +1,8 @@
-from diploma import d, neibours, index, my_bag, run, s, beta
+from diploma import d, neibours, index, my_bag, run, s, beta, mean_beta, my_triad
 import matplotlib.pyplot as plt
 import numpy as np
 import networkx as nx
+from statistics import mean
 
 def mfi1 (degrees, neibours):
     L = sum(degrees)
@@ -20,6 +21,12 @@ def mfi2 (degrees, neibours):
         ans.append(bi * LTD / L)
     return ans
 
+def mean_mfi1 (degrees, neibours):
+    return [mean(mfi1(degrees, neibours))]
+    
+def mean_mfi2 (degrees, neibours):
+    return [mean(mfi2(degrees, neibours))]
+
 if __name__ == "__main__":
     n = 10000
     m = 5
@@ -29,84 +36,50 @@ if __name__ == "__main__":
     steps = [n // 3, 2 * n // 3, n]
 
     fig = plt.figure()
-    gs = fig.add_gridspec(3, 2, hspace=0, wspace=0)
+    gs = fig.add_gridspec(3, 1, hspace=0, wspace=0)
     ax1, ax2, ax3 = gs.subplots()
-    graphs = run(graphCount, 6, my_bag, n, [m, p], [beta, mfi1, mfi2], [n // 3, n // 3, n // 3])
+    bag_graphs = run(graphCount, 6, my_bag, n, [m, p], [mean_beta, mean_mfi1, mean_mfi2], [n // 1000, n // 1000, n // 1000])
+    triad_graphs = run(graphCount, 6, my_triad, n, [m, p], [mean_beta, mean_mfi1, mean_mfi2], [n // 1000, n // 1000, n // 1000])
     
-    ax1[0].set_title("BAG")
-    ax1[1].set_title("BAG and configuration")
+    ax1.set_title("BAG_loglog")
     
-    ax1[0].set_ylabel("FI")
-    for i in range(len(graphs[0][0])):
-        meanCount = np.zeros(shape = histBins)
-        meanBeta = np.zeros(shape = histBins + 1)
-        for graph in graphs:
-            hist = np.histogram(graph[0][i], bins=histBins)
-            meanCount += hist[0]
-            meanBeta += hist[1]
-        meanCount /= graphCount
-        meanBeta /= graphCount
-        ax1[0].plot(meanBeta[:-1], meanCount)
-    ax1[1].plot(meanBeta[:-1], meanCount)
+    ax1.set_ylabel("FI")
+    mean_beta_data = np.array([i[0] for i in bag_graphs])
+    mean_beta_data = np.apply_along_axis(arr=mean_beta_data, axis=2, func1d=lambda x: x[0])
+    mean_beta_data = mean_beta_data.T
+    mean_beta_data = np.apply_along_axis(arr=mean_beta_data, axis=1, func1d=mean)
+    ax1.loglog(list(range(len(mean_beta_data) - 1)), mean_beta_data[:-1])
     
-    ax2[0].set_ylabel("MFI_1")
-    for i in range(len(graphs[1][0])):
-        meanCount = np.zeros(shape = histBins)
-        meanMFI = np.zeros(shape = histBins + 1)
-        for graph in graphs:
-            hist = np.histogram(graph[1][i], bins=histBins)
-            meanCount += hist[0]
-            meanMFI += hist[1]
-        meanCount /= graphCount
-        meanMFI /= graphCount
-        ax2[0].plot(meanMFI[:-1], meanCount)
-    ax2[1].plot(meanMFI[:-1], meanCount)
+    ax2.set_ylabel("MFI_1")
+    mean_mfi1_data = np.array([i[1] for i in bag_graphs])
+    mean_mfi1_data = np.apply_along_axis(arr=mean_mfi1_data, axis=2, func1d=lambda x: x[0])
+    mean_mfi1_data = mean_mfi1_data.T
+    mean_mfi1_data = np.apply_along_axis(arr=mean_mfi1_data, axis=1, func1d=mean)
+    ax2.loglog(list(range(len(mean_mfi1_data) - 1)), mean_mfi1_data[:-1])
     
-    ax3[0].set_ylabel("MFI_2")
-    for i in range(len(graphs[2][0])):
-        meanCount = np.zeros(shape = histBins)
-        meanMFI = np.zeros(shape = histBins + 1)
-        for graph in graphs:
-            hist = np.histogram(graph[2][i], bins=histBins)
-            meanCount += hist[0]
-            meanMFI += hist[1]
-        meanCount /= graphCount
-        meanMFI /= graphCount
-        ax3[0].plot(meanMFI[:-1], meanCount)
-    ax3[1].plot(meanMFI[:-1], meanCount)
+    ax3.set_ylabel("MFI_2")
+    mean_mfi2_data = np.array([i[2] for i in bag_graphs])
+    mean_mfi2_data = np.apply_along_axis(arr=mean_mfi2_data, axis=2, func1d=lambda x: x[0])
+    mean_mfi2_data = mean_mfi2_data.T
+    mean_mfi2_data = np.apply_along_axis(arr=mean_mfi2_data, axis=1, func1d=mean)
+    ax3.loglog(list(range(len(mean_mfi2_data) - 1)), mean_mfi2_data[:-1])
     
-    meanBetaCount = np.zeros(shape = histBins)
-    meanMFI1Count = np.zeros(shape = histBins)
-    meanMFI2Count = np.zeros(shape = histBins)
-    meanBeta = np.zeros(shape = histBins + 1)
-    meanMFI1 = np.zeros(shape = histBins + 1)
-    meanMFI2 = np.zeros(shape = histBins + 1)
-    for _ in range(graphCount):
-        sequence = list(np.rint((np.random.pareto(2.5, n) + 1)))
-        if not(nx.algorithms.is_multigraphical(sequence)):
-            sequence[0] += 1
-        M = nx.configuration_model(sequence)
-        G = nx.Graph()
-        for u,v in M.edges():
-            if not(G.has_edge(u,v)):
-                G.add_edge(u, v)
-        betaData = np.histogram(beta(list(list(zip(*G.degree))[1]), [list(nbrs.keys()) for _, nbrs in G.adjacency()]), bins=histBins)
-        meanBetaCount += betaData[0]
-        meanBeta += betaData[1]
-        mfi1Data = np.histogram(mfi1(list(list(zip(*G.degree))[1]), [list(nbrs.keys()) for _, nbrs in G.adjacency()]), bins=histBins)
-        meanMFI1Count += mfi1Data[0]
-        meanMFI1 += mfi1Data[1]
-        mfi2Data = np.histogram(mfi2(list(list(zip(*G.degree))[1]), [list(nbrs.keys()) for _, nbrs in G.adjacency()]), bins=histBins)
-        meanMFI2Count += mfi2Data[0]
-        meanMFI2 += mfi2Data[1]
-    meanBetaCount /= graphCount
-    meanBeta /= graphCount
-    ax1[1].plot(meanBeta[:-1], meanBetaCount)
-    meanMFI1Count /= graphCount
-    meanMFI1 /= graphCount
-    ax2[1].plot(meanMFI1[:-1], meanMFI1Count)
-    meanMFI2Count /= graphCount
-    meanMFI2 /= graphCount
-    ax3[1].plot(meanMFI2[:-1], meanMFI2Count)
+    plt.show()
+    
+    
+    fig = plt.figure()
+    gs = fig.add_gridspec(3, 1, hspace=0, wspace=0)
+    ax1, ax2, ax3 = gs.subplots()
+    
+    ax1.set_title("BAG")
+    
+    ax1.set_ylabel("FI")
+    ax1.plot(list(range(len(mean_beta_data) - 1)), mean_beta_data[:-1])
+    
+    ax2.set_ylabel("MFI_1")
+    ax2.plot(list(range(len(mean_mfi1_data) - 1)), mean_mfi1_data[:-1])
+    
+    ax3.set_ylabel("MFI_2")
+    ax3.plot(list(range(len(mean_mfi2_data) - 1)), mean_mfi2_data[:-1])
 
     plt.show()
